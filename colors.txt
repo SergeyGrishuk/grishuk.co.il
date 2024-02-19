@@ -1,0 +1,4 @@
+#1A2238 - Dark Blue
+#9DAAF2 - Purple
+#FF6A3D - Orange
+#F4DB7D - Yello
