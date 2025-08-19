@@ -39,9 +39,10 @@
                 <li><strong>Sergey Grishuk</strong></li>
             </ul>
             <ul>
-                <li><a class="contrast" href="#about">About</a></li>
-                <li><a class="contrast" href="#projects">Projects</a></li>
-                <li><a class="contrast" href="#contact">Contact</a></li>
+                <li><a class="contrast" href="./index.html#about">About</a></li>
+                <li><a class="contrast" href="./index.html#posts">Posts</a></li>
+                <li><a class="contrast" href="./index.html#projects">Projects</a></li>
+                <li><a class="contrast" href="./index.html#contact">Contact</a></li>
 
                 <li class="divider"></li>
 
@@ -81,6 +82,22 @@
                 <li>Android apps reverse engineering</li>
                 <li>Penetration Testing</li>
             </ul>
+        </article>
+
+        <article id="posts">
+            <h2>Posts</h2>
+            <hr />
+            <div class="grid">
+                <div>
+                    <h3><a class="contrast" href="./posts/systemd-service-hardening-introduction.html">Systemd Service Hardening - Introduction</a></h3>
+                    <p>Systemd provides a set of settings that can be applied to a service to harden it. 
+                        Those settings allow controlling privileges, networking, file system access and more. 
+                        For example, a service can be “chrooted” into a directory and not be able to access any of the file system files, 
+                        or it can be isolated from the network completely. To make the process of the hardening easier, 
+                        systemd comes with a built-in command that allows to check and score the security level of each service on the system, 
+                        which is helpful in the process of the hardening.</p>
+                </div>
+            </div>
         </article>
 
         <article>
