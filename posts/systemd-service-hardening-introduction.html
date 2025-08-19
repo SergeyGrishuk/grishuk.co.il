@@ -71,14 +71,14 @@
                 The command is <span class="consolas-font"><b>systemd-analyze security</b></span> which lists all the existing services and their score. 
                 Below is an example taken from Ubuntu 24.</p>
 
-            <img class="post-image" src="/images/systemd-analyze-security-output.PNG">
+            <img alt="systemd analyze security output" class="post-image" src="/images/systemd-analyze-security-output.PNG">
             <br><br>
             <p>The same command followed by the name of the service provides an in depth look into its security configurations. 
                 For example, the <span class="consolas-font"><b>systemd-analyze security ssh</b></span> 
                 command shows the security settings of the ssh service.</p> 
                 <p><i>On RHEL based distributions the service is named <span class="consolas-font"><b>sshd</b></span>.</i></p>
 
-            <img class="post-image" src="/images/systemd-analyze-security-ssh.PNG">
+            <img alt="systemd analyze security ssh output" class="post-image" src="/images/systemd-analyze-security-ssh.PNG">
             <br><br>
             <p>The output provides the names of the settings (same as it is written in the .service file), 
                 a short description for each one of them and the exposure score. 
