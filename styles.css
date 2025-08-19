@@ -23,3 +23,7 @@ nav ul li.divider {
 .title-name {
     font-size: 150%;
 }
+
+.empty-line {
+    margin-bottom: 1rem;
+}
