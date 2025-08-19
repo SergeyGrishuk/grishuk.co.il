@@ -1,0 +1,15 @@
+nav ul li.divider {
+    border-left: 1px solid #666;
+    border-right: 1px solid #666;
+    margin: 0 0.5rem;
+    height: 55%;
+    list-style: none;
+}
+.consolas-font {
+    font-family: monospace;
+    font-size: x-large;
+}
+img {
+    display: block;
+    margin: auto;
+}
