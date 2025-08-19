@@ -61,81 +61,15 @@
     </header>
 
     <main class="container">
-        <article id="about">
-            <h2>About Me</h2>
-            <hr />
-            <p>I am a cyber researcher and software developer with over 5 years of enterprise experience. 
-                I specialize in developing custom solutions using a wide range of tools. During my career, 
-                I have conducted research on Android applications, web applications, network protocols, 
-                and Windows/Linux operating systems, and developed software products based on the results. 
-                My solutions run daily in various production environments. 
-                The most important traits I strive for in every solution I provide are stability and maintainability.</p>
-            <hr />
-            <h3>Tools and Technologies</h3>
-            <ul>
-                <li>Python & Java</li>
-                <li>Linux</li>
-                <li>AWS, GCP</li>
-                <li>Docker / Podman</li>
-                <li>Kafka</li>
-                <li>Low level networking and network research</li>
-                <li>Android apps reverse engineering</li>
-                <li>Penetration Testing</li>
-            </ul>
-        </article>
-
         <article id="posts">
-            <h2>Posts</h2>
-            <hr />
-            <div class="grid">
-                <div>
-                    <h3><a class="contrast" href="./posts/systemd-service-hardening-introduction.html">Systemd Service Hardening - Introduction</a></h3>
-                    <p>Systemd provides a set of settings that can be applied to a service to harden it. 
-                        Those settings allow controlling privileges, networking, file system access and more. 
-                        For example, a service can be “chrooted” into a directory and not be able to access any of the file system files, 
-                        or it can be isolated from the network completely. To make the process of the hardening easier, 
-                        systemd comes with a built-in command that allows to check and score the security level of each service on the system, 
-                        which is helpful in the process of the hardening.</p>
-                </div>
-            </div>
-        </article>
-
-        <article>
-            <section id="projects">
-                <h2>Projects</h2>
-                <hr />
-                <div class="grid">
-                    <div>
-                        <h3>Dark Scan</h3>
-
-                        <img alt="Static Badge" src="https://img.shields.io/badge/Python-blue">
-                        <img alt="Static Badge" src="https://img.shields.io/badge/Tor-purple">
-                        <img alt="Static Badge" src="https://img.shields.io/badge/OSINT-green">
-                        <img alt="Static Badge" src="https://img.shields.io/badge/Pen%20Testing-red">
-
-                        <br><br>
-
-                        <p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-at-host/dark_scan">Dark Scan</a> is a tool that can scan "clear net" targets via the Tor network and .onion services.
-                            It uses a pre-compiled standalone Tor binary so there is no need to install or configure anything on the host system. 
-                            The connection to the Tor network is managed automatically without user interaction.</p>
-                    </div>
-                    <!--- <div>
-                        <h3>Project 2</h3>
-                        <p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-at-host/dark_scan">Dark Scan</a> is a port scanner that uses the Tor network to scan targets.
-                            To connect to the Tor network Dark Scan uses a pre-compiled standalone Tor binary,
-                            there is no need to install/configure anything on the host system.
-                            The connection to the Tor network is done automatically without user interaction.</p>
-                    </div> -->
-                </div>
-            </section>
-        </article>
-
-        <article>
-            <section id="contact">
-                <h2>Contact</h2>
-                <hr />
-                <p>Feel free to contact me at <a href="mailto:sergey@grishuk.co.il">sergey@grishuk.co.il</a></p>
-            </section>
+            <h2>Systemd Service Hardening - Introduction</h2>
+            <hr />      
+            <p>Systemd provides a set of settings that can be applied to a service to harden it. 
+                Those settings allow controlling privileges, networking, file system access and more. 
+                For example, a service can be “chrooted” into a directory and not be able to access any of the file system files, 
+                or it can be isolated from the network completely. To make the process of the hardening easier, 
+                systemd comes with a built-in command that allows to check and score the security level of each service on the system, 
+                which is helpful in the process of the hardening.</p>
         </article>
     </main>
 </body>
