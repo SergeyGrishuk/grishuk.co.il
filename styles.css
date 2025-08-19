@@ -9,7 +9,7 @@ nav ul li.divider {
     font-family: monospace;
     font-size: x-large;
 }
-img {
+.post-image {
     display: block;
     margin: auto;
 }
