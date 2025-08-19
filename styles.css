@@ -24,6 +24,6 @@ nav ul li.divider {
     font-size: 150%;
 }
 
-.empty-line {
+.post-image, .badges-container {
     margin-bottom: 1rem;
 }
