@@ -5,10 +5,7 @@ nav ul li.divider {
     height: 55%;
     list-style: none;
 }
-.consolas-font {
-    font-family: monospace;
-    font-size: x-large;
-}
+
 .post-image {
     display: block;
     margin: auto;
