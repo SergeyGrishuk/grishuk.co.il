@@ -17,6 +17,7 @@
 
     <title>Sergey Grishuk</title>
     
+    <link href="https://unpkg.com/prismjs@1.30.0/themes/prism-tomorrow.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
     <link rel="stylesheet" href="/styles.css">
     <link rel="icon" href="/favicon.ico" type="image/x-icon">
@@ -98,7 +99,71 @@
                 For example, the SSH service file on Ubuntu is located under <code>/usr/lib/systemd/system/</code> as seen in the output next to <code>loaded</code>.</p>
 
             <img alt="systemctl status ssh" class="post-image" src="/images/systemctl-status-ssh.PNG">
+
+            <p>As an example, I will create a new service named <code>my-api</code>. 
+                This is a minimalistic FastAPI application for demonstration purposes. 
+                The code of the application is written in Python and looks as follows.</p>
+
+            <pre class="code-box">
+                <code class="language-python code-box">
+from fastapi import FastAPI
+
+app = FastAPI()
+
+@app.get("/")
+def root():
+    return {"msg": "The API is running"}
+                </code>
+            </pre>
+
+            <p>To make a service out of it, I will use the following basic template for a <code>.service</code> file.</p>
+
+            <pre class="code-box">
+                <code class="language-systemd code-box">
+[Unit]
+Description=My API
+After=network.target
+
+[Service]
+ExecStart=/usr/bin/uvicorn /opt/my-api/my-api.py
+
+[Install]
+WantedBy=multi-user.target
+                </code>
+            </pre>
+
+            <p>After placing the service file under the <code>/usr/lib/systemd/system</code> directory and running <code>systemctl daemon-reload</code> the system recognizes the new service, 
+                this can be verified using the <code>systemctl status my-api.service</code> command.</p>
+
+            <img alt="systemctl-status-my-api" src="/images/systemctl-status-myapi.PNG" class="post-image"/>
+
+            <p>Running the <code>systemd-analyze security my-api</code> command shows that the service is not secured at all.</p>
+
+            <img alt="systemd-analyze-security-my-api" class="post-image" src="/images/systemd-analyze-security-my-api.png" />
+
+            <p>To apply any of the security settings, add them under the <code>[Service]</code> section.</p>
+
+            <pre class="code-box">
+                <code class="language-systemd code-box">
+[Unit]
+Description=My API
+After=network.target
+
+[Service]
+User=my-user
+Group=my-user
+ExecStart=/usr/bin/uvicorn /opt/my-api/my-api.py
+RootDirectory=/my-api
+NoNewPrivileges=true
+
+[Install]
+WantedBy=multi-user.target
+                </code>
+            </pre>
         </article>
     </main>
+
+    <script src="https://unpkg.com/prismjs@1.30.0/components/prism-core.min.js"></script>
+    <script src="https://unpkg.com/prismjs@1.30.0/plugins/autoloader/prism-autoloader.min.js"></script>
 </body>
 </html>

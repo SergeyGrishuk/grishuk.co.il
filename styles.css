@@ -19,3 +19,10 @@ nav ul li.divider {
 .post-image, .badges-container {
     margin-bottom: 1rem;
 }
+
+.code-box {
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+}
