@@ -109,7 +109,18 @@
                 <h2>Projects</h2>
                 <hr />
                 <div class="grid">
+                    {% for project in projects %}
                     <div>
+                        <h3><a class="contrast" target="_blank" rel="noopener noreferrer" href="{{ project.github_link }}">{{ project.title }} <i class="fa-brands fa-github"></i></a></h3>
+                        <p>{{ project.description|replace('\n', '<br>')|safe }}</p>
+                        <div>
+                            {% for tag in project.tags %}
+                                <small><code>{{ tag.name }}</code></small>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    {% endfor %}
+                    <!-- <div>
                         <h3><a class="contrast" target="_blank" rel="noopener noreferrer" href="https://github.com/user-at-host/dark_scan">Dark Scan <i class="fa-brands fa-github"></i></a></h3>
 
                         <div class="badges-container">
@@ -126,7 +137,7 @@
                             It is a zero-configuration tool that scans targets through the Tor network out of the box. 
                             It achieves this by automatically configuring all necessary Tor settings on each run and shipping with a pre-compiled, 
                             standalone Tor binary. Dark Scan can also scan targets on the Tor network itself, such as <code>.onion</code> services.</p>
-                    </div>
+                    </div> -->
                 </div>
             </section>
         </article>
