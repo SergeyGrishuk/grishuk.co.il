@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 
 
-from sys import stderr
+from sys import stderr, path
+from pathlib import Path
 from dotenv import load_dotenv
 
 load_dotenv(".env")
@@ -9,7 +10,7 @@ load_dotenv(".env")
 from argparse import ArgumentParser, Namespace
 
 project_root = Path(__file__).resolve().parents[1]
-sys.path.append(str(project_root))
+path.append(str(project_root))
 
 from db_utils.database import SessionLocal
 from db_utils.models import Project, Tag
