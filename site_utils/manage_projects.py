@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 
+from os.path import join
 from sys import stderr, path
 from pathlib import Path
 from dotenv import load_dotenv
@@ -31,9 +32,13 @@ def add_project() -> None:
     print("--- Add a New Project ---")
     
     title = input("Enter project title: ")
-    description = input("Enter project description (use \\n for new lines): ").replace('\\n', '\n')
+    #description = input("Enter project description (use \\n for new lines): ").replace('\\n', '\n')
+    description_markdown_file = input("Enter description markdown file name: ")
     github_link = input("Enter GitHub link: ")
     tags_input = input("Enter tags (comma-separated): ")
+
+    with open(join("markdown_content", description_markdown_file)) as f:
+        description = f.read()
 
     db = SessionLocal()
 
