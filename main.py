@@ -5,13 +5,25 @@ from fastapi import FastAPI, Request, Depends
 from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
 from sqlalchemy.orm import Session
+from starlette.middleware.base import BaseHTTPMiddleware
 
 import models
 from database import SessionLocal
 
 
+class SchemeFixMiddleware(BaseHTTPMiddleware):
+    async def dispatch(self, request: Request, call_next):
+        if "x-forwarded-proto" in request.headers:
+            request.scope["scheme"] = request.headers["x-forwarded-proto"]
+
+        response = await call_next(request)
+
+        return response
+
+
 app = FastAPI()
 
+app.add_middleware(SchemeFixMiddleware)
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
 
