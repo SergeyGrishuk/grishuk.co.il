@@ -7,8 +7,8 @@ from dotenv import load_dotenv
 load_dotenv(".env")
 
 from argparse import ArgumentParser, Namespace
-from database import SessionLocal, engine
-from models import Project, Tag
+from db_utils.database import SessionLocal, engine
+from db_utils.models import Project, Tag
 
 
 def parse_arguments() -> Namespace:
