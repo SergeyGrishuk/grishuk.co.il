@@ -82,7 +82,7 @@ def delete_project():
         for project in projects:
             print(f"- {project.title}")
         
-        title_to_remove = input("Enter the title of the prohect to remove: ")
+        title_to_remove = input("Enter the title of the project to remove: ")
 
         project = db.query(Project).filter_by(title=title_to_remove).first()
 
@@ -91,8 +91,13 @@ def delete_project():
 
             return
 
-        db.delete(project)
-        db.commit()
+        confirm = input(f"Are you sure you want to delete {project.title}? [y/N] ")
+
+        if confirm.lower() == "y":
+            db.delete(project)
+            db.commit()
+        else:
+            print("Deletion canceled")
     finally:
         db.close()
 
