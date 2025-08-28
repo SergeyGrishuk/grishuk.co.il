@@ -2,7 +2,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 from os import getenv
-from models import Base
+from db_utils.models import Base
 
 from logging.config import fileConfig
 

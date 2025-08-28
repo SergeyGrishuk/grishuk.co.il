@@ -1,7 +1,7 @@
 #!/usr/vin/env python3
 
 
-from database import Base
+from db_utils.database import Base
 from sqlalchemy import Column, Integer, String, Text, Table, ForeignKey, DateTime
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func

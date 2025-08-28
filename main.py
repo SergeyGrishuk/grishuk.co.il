@@ -7,8 +7,8 @@ from fastapi.staticfiles import StaticFiles
 from sqlalchemy.orm import Session
 from starlette.middleware.base import BaseHTTPMiddleware
 
-import models
-from database import SessionLocal
+import db_utils.models as models
+from db_utils.database import SessionLocal
 
 
 class SchemeFixMiddleware(BaseHTTPMiddleware):
