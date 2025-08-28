@@ -6,6 +6,7 @@ from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
 from sqlalchemy.orm import Session
 from starlette.middleware.base import BaseHTTPMiddleware
+from markdown2 import markdown
 
 import db_utils.models as models
 from db_utils.database import SessionLocal
@@ -29,6 +30,10 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 
 templates = Jinja2Templates(directory="templates")
 
+def markdown_to_html(text):
+    return markdown(text)
+
+templates.env.filters["markdown"] = markdown_to_html
 
 def get_db():
     db = SessionLocal()
