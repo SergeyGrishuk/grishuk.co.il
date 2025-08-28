@@ -112,7 +112,7 @@
                     {% for project in projects %}
                     <div>
                         <h3><a class="contrast" target="_blank" rel="noopener noreferrer" href="{{ project.github_link }}">{{ project.title }} <i class="fa-brands fa-github"></i></a></h3>
-                        <p>{{ project.description|markdown|safe }}</p>
+                        {{ project.description|markdown|safe }}
                         <div>
                             {% for tag in project.tags %}
                                 <small><code>{{ tag.name }}</code></small>
