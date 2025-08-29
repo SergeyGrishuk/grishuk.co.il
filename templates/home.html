@@ -1,159 +1,107 @@
-<!DOCTYPE html>
-<html lang="en" data-theme="dark">
-<head>
+{% extends "base.html" }
 
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-8849YBK81C"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
+{% block hero %}
+<section class="hero">
+    <hgroup>
+        <h1>Independent Cybersecurity Consultant & Researcher</h1>
+        <h2>Custom solutions for your unique and complex security challenges.</h2>
+    </hgroup>
+    <div class="hero-buttons">
+        <a href="/#projects" role="button" class="contrast">View My Work</a>
+        <a href="/#contact" role="button" class="secondary">Get In Touch</a>
+    </div>
+</section>
+{% endblock %}
 
-        gtag('config', 'G-8849YBK81C');
-    </script>
+{% block content %}
+<main class="container">
+    <article id="services"> <h2>Services</h2>
+        <hr />
 
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-
-    <title>Independent Cybersecurity Consultant & Researcher</title>
-    <meta name="description" content="I provide custom solutions for unique and complex cybersecurity challenges, including vulnerability assessments, security automation, and strategic consulting.">
-    
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
-    <link rel="stylesheet" href="{{ url_for('static', path='/styles.css') }}">
-    <link rel="icon" href="{{ url_for('static', path='/favicon.ico') }}" type="image/x-icon">
-
-    <script src="https://kit.fontawesome.com/2e0ebe0f0a.js" crossorigin="anonymous"></script>
-
-</head>
-
-<body>
-    <header class="container">
-        <nav>
-            <ul>
-                <li><a class="contrast title-name" href="/">Sergey Grishuk</a></li>
-            </ul>
-            <ul>
-                <li><a class="contrast" href="/#services">Services</a></li>
-                <li><a class="contrast" href="/#posts">Posts</a></li>
-                <li><a class="contrast" href="/#case-studies">Case Studies</a></li>
-                <li><a class="contrast" href="/#contact">Contact</a></li>
-
-                <li class="divider"></li>
-
-                <li>
-                    <a target="_blank" rel="noopener noreferrer" href="https://github.com/user-at-host">
-                        <i class="fa-brands fa-github"></i>
-                    </a>
-                </li>
-                <li>
-                    <a target="_blank" rel="noopener noreferrer" href="https://www.linkedin.com/in/sergey-grishuk/">
-                        <i class="fa-brands fa-linkedin"></i>
-                    </a>
-                </li>
-            </ul>
-        </nav>
-    </header>
-
-    <section class="hero">
         <hgroup>
-            <h1>Independent Cybersecurity Consultant & Researcher</h1>
-            <h2>Custom solutions for your unique and complex security challenges.</h2>
+            <h3>Vulnerability Assessments & Penetration Testing</h3>
+            <p>I find and prioritize critical weaknesses in your web applications, APIs, and networks, providing a clear, actionable report to fix them before an attacker can exploit them.</p>
         </hgroup>
-        <div class="hero-buttons">
-            <a href="/#projects" role="button" class="contrast">View My Work</a>
-            <a href="/#contact" role="button" class="secondary">Get In Touch</a>
+
+        <hgroup>
+            <h3>Custom Security Automation</h3>
+            <p>I build reliable tools to automate your repetitive security tasks, freeing up your team's time and ensuring consistent, error-free operations.</p>
+        </hgroup>
+
+        <hgroup>
+            <h3>Strategic Security Consulting</h3>
+            <p>Get direct, expert guidance on your security architecture, incident response planning, or compliance challenges to make smarter, more effective decisions.</p>
+        </hgroup>
+
+        <hgroup>
+            <h3>On-Demand Security Research</h3>
+            <p>Need to understand a new threat or a proprietary application? I provide targeted research and intelligence to give you the answers and the advantage you need.</p>
+        </hgroup>
+
+    </article>
+
+    <article id="posts">
+        <h2>Posts</h2>
+        <hr />
+        <div class="grid">
+            {% for post in posts %}
+            <div>
+                <h3><a class="contrast" href="#">{{ post.title }}</a></h3>
+                <p>{{ post.summary }}</p>
+                <div>
+                    {% for tag in post.tags %}
+                        <small><code>{{ tag.name }}</code></small>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endfor %}
+            <!-- <div>
+                <h3><a class="contrast" href="./posts/systemd-service-hardening-introduction.html">Systemd Service Hardening - Introduction</a></h3>
+                <p>Systemd provides a set of settings that can be applied to a service to harden it. 
+                    Those settings allow controlling privileges, networking, file system access and more. 
+                    For example, a service can be “chrooted” into a directory and not be able to access any of the file system files, 
+                    or it can be isolated from the network completely. To make the process of the hardening easier, 
+                    systemd comes with a built-in command that allows to check and score the security level of each service on the system, 
+                    which is helpful in the process of the hardening.</p>
+            </div> -->
         </div>
-    </section>
+    </article>
 
-    <main class="container">
-        <article id="services"> <h2>Services</h2>
-            <hr />
-
-            <hgroup>
-                <h3>Vulnerability Assessments & Penetration Testing</h3>
-                <p>I find and prioritize critical weaknesses in your web applications, APIs, and networks, providing a clear, actionable report to fix them before an attacker can exploit them.</p>
-            </hgroup>
-
-            <hgroup>
-                <h3>Custom Security Automation</h3>
-                <p>I build reliable tools to automate your repetitive security tasks, freeing up your team's time and ensuring consistent, error-free operations.</p>
-            </hgroup>
-
-            <hgroup>
-                <h3>Strategic Security Consulting</h3>
-                <p>Get direct, expert guidance on your security architecture, incident response planning, or compliance challenges to make smarter, more effective decisions.</p>
-            </hgroup>
-
-            <hgroup>
-                <h3>On-Demand Security Research</h3>
-                <p>Need to understand a new threat or a proprietary application? I provide targeted research and intelligence to give you the answers and the advantage you need.</p>
-            </hgroup>
-
-        </article>
-
-        <article id="posts">
-            <h2>Posts</h2>
+    <article>
+        <section id="case-studies">
+            <h2>Case Studies</h2>
             <hr />
             <div class="grid">
-                {% for post in posts %}
+                {% for project in projects %}
                 <div>
-                    <h3><a class="contrast" href="#">{{ post.title }}</a></h3>
-                    <p>{{ post.summary }}</p>
+                    <h3><a class="contrast" target="_blank" rel="noopener noreferrer" href="{{ project.github_link }}">{{ project.title }} <i class="fa-brands fa-github"></i></a></h3>
+                    {{ project.description|markdown|safe }}
                     <div>
-                        {% for tag in post.tags %}
+                        {% for tag in project.tags %}
                             <small><code>{{ tag.name }}</code></small>
                         {% endfor %}
                     </div>
                 </div>
                 {% endfor %}
                 <!-- <div>
-                    <h3><a class="contrast" href="./posts/systemd-service-hardening-introduction.html">Systemd Service Hardening - Introduction</a></h3>
-                    <p>Systemd provides a set of settings that can be applied to a service to harden it. 
-                        Those settings allow controlling privileges, networking, file system access and more. 
-                        For example, a service can be “chrooted” into a directory and not be able to access any of the file system files, 
-                        or it can be isolated from the network completely. To make the process of the hardening easier, 
-                        systemd comes with a built-in command that allows to check and score the security level of each service on the system, 
-                        which is helpful in the process of the hardening.</p>
+                    <div class="badges-container">
+                        <img alt="Python Badge" src="https://img.shields.io/badge/Python-blue">
+                        <img alt="Tor Badge" src="https://img.shields.io/badge/Tor-purple">
+                        <img alt="OSINT Badge" src="https://img.shields.io/badge/OSINT-green">
+                        <img alt="Pen Testing Badge" src="https://img.shields.io/badge/Pen%20Testing-red">
+                    </div>
                 </div> -->
             </div>
-        </article>
+        </section>
+    </article>
 
-        <article>
-            <section id="case-studies">
-                <h2>Case Studies</h2>
-                <hr />
-                <div class="grid">
-                    {% for project in projects %}
-                    <div>
-                        <h3><a class="contrast" target="_blank" rel="noopener noreferrer" href="{{ project.github_link }}">{{ project.title }} <i class="fa-brands fa-github"></i></a></h3>
-                        {{ project.description|markdown|safe }}
-                        <div>
-                            {% for tag in project.tags %}
-                                <small><code>{{ tag.name }}</code></small>
-                            {% endfor %}
-                        </div>
-                    </div>
-                    {% endfor %}
-                    <!-- <div>
-                        <div class="badges-container">
-                            <img alt="Python Badge" src="https://img.shields.io/badge/Python-blue">
-                            <img alt="Tor Badge" src="https://img.shields.io/badge/Tor-purple">
-                            <img alt="OSINT Badge" src="https://img.shields.io/badge/OSINT-green">
-                            <img alt="Pen Testing Badge" src="https://img.shields.io/badge/Pen%20Testing-red">
-                        </div>
-                    </div> -->
-                </div>
-            </section>
-        </article>
-
-        <article>
-            <section id="contact">
-                <h2>Ready to Secure Your Assets?</h2>
-                <hr />
-                <p>Let's discuss your security challenges. Contact me for a free, confidential consultation.</p>
-                <h3><a href="mailto:sergey@grishuk.co.il" role="button" class="contrast">sergey@grishuk.co.il</a></h3>
-            </section>
-        </article>
-    </main>
-</body>
-</html>
+    <article>
+        <section id="contact">
+            <h2>Ready to Secure Your Assets?</h2>
+            <hr />
+            <p>Let's discuss your security challenges. Contact me for a free, confidential consultation.</p>
+            <h3><a href="mailto:sergey@grishuk.co.il" role="button" class="contrast">sergey@grishuk.co.il</a></h3>
+        </section>
+    </article>
+</main>
+{% endblock %}
