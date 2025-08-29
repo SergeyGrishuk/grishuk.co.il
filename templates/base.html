@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-8849YBK81C"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'G-8849YBK81C');
+    </script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <title>Independent Cybersecurity Consultant & Researcher</title>
+    <meta name="description" content="I provide custom solutions for unique and complex cybersecurity challenges, including vulnerability assessments, security automation, and strategic consulting.">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', path='/styles.css') }}">
+    <link rel="icon" href="{{ url_for('static', path='/favicon.ico') }}" type="image/x-icon">
+
+    <script src="https://kit.fontawesome.com/2e0ebe0f0a.js" crossorigin="anonymous"></script>
+
+</head>
+
+<body>
+    <header class="container">
+        <nav>
+            <ul>
+                <li><a class="contrast title-name" href="/">Sergey Grishuk</a></li>
+            </ul>
+            <ul>
+                <li><a class="contrast" href="/#services">Services</a></li>
+                <li><a class="contrast" href="/#posts">Posts</a></li>
+                <li><a class="contrast" href="/#case-studies">Case Studies</a></li>
+                <li><a class="contrast" href="/#contact">Contact</a></li>
+
+                <li class="divider"></li>
+
+                <li>
+                    <a target="_blank" rel="noopener noreferrer" href="https://github.com/user-at-host">
+                        <i class="fa-brands fa-github"></i>
+                    </a>
+                </li>
+                <li>
+                    <a target="_blank" rel="noopener noreferrer" href="https://www.linkedin.com/in/sergey-grishuk/">
+                        <i class="fa-brands fa-linkedin"></i>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </header>
+
+    {% block hero %}{% endblock %}
+
+    <main class="container">
+        {% block content %}{% endblock %}
+    </main>
+</body>
+</html>
