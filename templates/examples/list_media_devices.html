@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <article>
+        <h1>Media Device Lister</h1>
+        
+        <div class="note">
+            <p><strong>Note:</strong> To protect your privacy, browsers won't show device names (labels) until you grant permission. Clicking the button below will trigger a permission prompt for your camera and microphone.</p>
+        </div>
+
+        <br>
+        <button id="listDevicesBtn">List My Devices</button>
+
+        <h2>Detected Devices:</h2>
+        <pre id="deviceList">Click the button to start...</pre>
+
+        <script>
+            const listDevicesBtn = document.getElementById('listDevicesBtn');
+            const deviceList = document.getElementById('deviceList');
+
+            listDevicesBtn.addEventListener('click', async () => {
+                deviceList.textContent = 'Requesting permissions and searching for devices...';
+
+                if (!navigator.mediaDevices || !navigator.mediaDevices.enumerateDevices) {
+                    deviceList.textContent = 'The mediaDevices API (enumerateDevices) is not supported by your browser.';
+                    return;
+                }
+
+                // Use a 'finally' block to ensure hardware is released.
+                let stream = null;
+                try {
+                    // This call is necessary to trigger the permission prompt and unlock device labels.
+                    stream = await navigator.mediaDevices.getUserMedia({ audio: true, video: true });
+                    const devices = await navigator.mediaDevices.enumerateDevices();
+                    
+                    if (devices.length === 0) {
+                        deviceList.textContent = 'No media devices found.';
+                        return;
+                    }
+
+                    let output = '';
+                    let audioInputs = 0, audioOutputs = 0, videoInputs = 0;
+
+                    devices.forEach(device => {
+                        let type = '';
+                        if (device.kind === 'audioinput') {
+                            type = `Microphone ${++audioInputs}`;
+                        } else if (device.kind === 'audiooutput') {
+                            type = `Speaker ${++audioOutputs}`;
+                        } else if (device.kind === 'videoinput') {
+                            type = `Camera ${++videoInputs}`;
+                        }
+                        
+                        output += `--------------------------------\n`;
+                        output += `${type}:\n`;
+                        output += `  Label: ${device.label || 'Name not available (permission denied?)'}\n`;
+                        output += `  Kind: ${device.kind}\n`;
+                        output += `  Device ID: ${device.deviceId}\n`;
+                    });
+
+                    deviceList.textContent = output;
+
+                } catch (err) {
+                    let errorMessage = `Error: ${err.name}`;
+                    if (err.name === "NotAllowedError") {
+                        errorMessage += "\n\nYou denied permission to access media devices. Device labels cannot be read.";
+                    } else {
+                        errorMessage += `\n\n${err.message}`;
+                    }
+                    deviceList.textContent = errorMessage;
+                } finally {
+                    // Stop all tracks to turn off the camera/mic light immediately.
+                    if (stream) {
+                        stream.getTracks().forEach(track => track.stop());
+                    }
+                }
+            });
+        </script>
+    </article>
+{% endblock %}
