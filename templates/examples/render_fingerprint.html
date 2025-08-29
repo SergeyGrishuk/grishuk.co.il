@@ -1,0 +1,169 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <article>
+        <h1>WebGL Render Fingerprint</h1>
+
+        <div id="container">
+            <h2>Rendered Image:</h2>
+            <div id="canvas-container"></div>
+            
+            <h2>Image Hash (Fingerprint):</h2>
+            <pre id="fingerprint-hash"></pre>
+        </div>
+
+        <script>
+            document.addEventListener("DOMContentLoaded", () => {
+                const canvasContainer = document.getElementById('canvas-container');
+                const hashOutput = document.getElementById('fingerprint-hash');
+
+                // Simple non-cryptographic hash for demo purposes.
+                function simpleHash(str) {
+                    let hash = 0;
+                    for (let i = 0; i < str.length; i++) {
+                        const char = str.charCodeAt(i);
+                        hash = (hash << 5) - hash + char;
+                        hash |= 0;
+                    }
+                    return 'demo-hash: ' + hash.toString(16);
+                }
+
+                function setupWebGL(canvas) {
+                    const gl = canvas.getContext("webgl2") || canvas.getContext("webgl");
+                    if (!gl) {
+                        throw new Error("WebGL is not supported by your browser.");
+                    }
+                    return gl;
+                }
+
+                function createShaderProgram(gl, vertexShaderSource, fragmentShaderSource) {
+                    function compileShader(type, source) {
+                        const shader = gl.createShader(type);
+                        gl.shaderSource(shader, source);
+                        gl.compileShader(shader);
+                        if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
+                            const error = "Shader compile error: " + gl.getShaderInfoLog(shader);
+                            gl.deleteShader(shader);
+                            throw new Error(error);
+                        }
+                        return shader;
+                    }
+
+                    const vertexShader = compileShader(gl.VERTEX_SHADER, vertexShaderSource);
+                    const fragmentShader = compileShader(gl.FRAGMENT_SHADER, fragmentShaderSource);
+
+                    const program = gl.createProgram();
+                    gl.attachShader(program, vertexShader);
+                    gl.attachShader(program, fragmentShader);
+                    gl.linkProgram(program);
+
+                    if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
+                        throw new Error("Shader program link error: " + gl.getProgramInfoLog(program));
+                    }
+                    return program;
+                }
+
+                function drawScene(gl, program, vertexData) {
+                    gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
+                    gl.clearColor(0.0, 0.0, 0.0, 0.0);
+                    gl.clear(gl.COLOR_BUFFER_BIT);
+
+                    gl.useProgram(program);
+
+                    const positionAttribLocation = gl.getAttribLocation(program, "attrVertex");
+                    const colorAttribLocation = gl.getAttribLocation(program, "attrColor");
+                    
+                    const buffer = gl.createBuffer();
+                    gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+                    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertexData), gl.STATIC_DRAW);
+
+                    const stride = 6 * 4;
+                    gl.vertexAttribPointer(positionAttribLocation, 2, gl.FLOAT, false, stride, 0);
+                    gl.vertexAttribPointer(colorAttribLocation, 4, gl.FLOAT, false, stride, 8);
+
+                    gl.enableVertexAttribArray(positionAttribLocation);
+                    gl.enableVertexAttribArray(colorAttribLocation);
+
+                    const transformMatrix = [
+                        1.5, 0,   0, 0,
+                        0,   1.5, 0, 0,
+                        0,   0,   1, 0,
+                        0.5, 0,   0, 1
+                    ];
+                    const transformUniformLocation = gl.getUniformLocation(program, "transform");
+                    gl.uniformMatrix4fv(transformUniformLocation, false, transformMatrix);
+
+                    const vertexCount = vertexData.length / 6;
+                    gl.drawArrays(gl.TRIANGLES, 0, vertexCount);
+                }
+
+                function getFingerprint(gl) {
+                    const width = gl.canvas.width;
+                    const height = gl.canvas.height;
+                    const pixels = new Uint8Array(width * height * 4);
+                    gl.readPixels(0, 0, width, height, gl.RGBA, gl.UNSIGNED_BYTE, pixels);
+
+                    let pixelString = "";
+                    for(let i = 0; i < pixels.length; i++) {
+                        pixelString += String.fromCharCode(pixels[i]);
+                    }
+                    
+                    return simpleHash(pixelString);
+                }
+                
+                function main() {
+                    const canvas = document.createElement("canvas");
+                    canvas.width = 256;
+                    canvas.height = 128;
+                    
+                    try {
+                        const gl = setupWebGL(canvas);
+
+                        const vsSource = `
+                            attribute vec2 attrVertex;
+                            attribute vec4 attrColor;
+                            varying vec4 varyingColor;
+                            uniform mat4 transform;
+                            void main() {
+                                varyingColor = attrColor;
+                                gl_Position = transform * vec4(attrVertex, 0.0, 1.0);
+                            }
+                        `;
+                        const fsSource = `
+                            precision mediump float;
+                            varying vec4 varyingColor;
+                            void main() {
+                                gl_FragColor = varyingColor;
+                            }
+                        `;
+
+                        const shaderProgram = createShaderProgram(gl, vsSource, fsSource);
+
+                        const vertexData = [];
+                        const segments = 128;
+                        for (let i = 0; i < segments; i++) {
+                            const angle1 = (45 + i / segments * 270) / 360 * 2 * Math.PI;
+                            const angle2 = (45 + (i + 1) / segments * 270) / 360 * 2 * Math.PI;
+                            
+                            vertexData.push(-0.25, 0.0, 1.0, 0.7, 0.0, 1.0);
+                            vertexData.push(-0.25 + 0.5 * Math.cos(angle1), 0.5 * Math.sin(angle1), 1.0, 1.0 - i / segments, 0.0, 1.0);
+                            vertexData.push(-0.25 + 0.5 * Math.cos(angle2), 0.5 * Math.sin(angle2), 1.0, 1.0 - (i + 1) / segments, 0.0, 1.0);
+                        }
+
+                        drawScene(gl, shaderProgram, vertexData);
+                        canvasContainer.appendChild(canvas);
+
+                        hashOutput.textContent = getFingerprint(gl);
+
+                    } catch (error) {
+                        console.error(error);
+                        canvasContainer.textContent = "Error: " + error.message;
+                        hashOutput.textContent = "N/A";
+                    }
+                }
+
+                main();
+            });
+        </script>
+    </article>
+{% endblock %}
