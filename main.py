@@ -54,3 +54,8 @@ def root(request: Request, db: Session = Depends(get_db)):
         "projects": projects,
         "posts": posts
     })
+
+
+@app.get("/examples/{page_name}")
+def show_example(request: Request, page_name: str):
+    return templates.TemplateResponse(f"examples/{page_name}", {"request": request})
