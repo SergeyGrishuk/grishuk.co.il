@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Display Information</title>
+    <style>
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; 
+            background-color: #1e1e1e; 
+            color: #d4d4d4; 
+            padding: 2em; 
+            line-height: 1.6;
+        }
+        #container { 
+            background-color: #252526; 
+            border: 1px solid #333; 
+            padding: 1.5em; 
+            border-radius: 8px; 
+            max-width: 600px;
+            margin: auto;
+        }
+        h1 { text-align: center; color: #9cdcfe; }
+        p { margin: 0.5em 0; }
+        strong { color: #569cd6; min-width: 200px; display: inline-block; }
+    </style>
+</head>
+<body>
+    <div id="container">
+        <h1>Display & Screen Info</h1>
+        <p><strong>Screen Resolution:</strong> <span id="resolution"></span></p>
+        <p><strong>Available Screen Space:</strong> <span id="available-space"></span></p>
+        <p><strong>Device Pixel Ratio (DPR):</strong> <span id="dpr"></span></p>
+        <p><strong>Calculated Physical Pixels:</strong> <span id="physical-pixels"></span></p>
+        <hr style="border-color: #333; margin: 1em 0;">
+        <p><strong>Color Depth:</strong> <span id="color-depth"></span></p>
+        <p><strong>Pixel Depth:</strong> <span id="pixel-depth"></span></p>
+        <p><strong>Screen Orientation:</strong> <span id="orientation"></span></p>
+        <hr style="border-color: #333; margin: 1em 0;">
+        <p><strong>Browser Viewport Size:</strong> <span id="viewport"></span></p>
+    </div>
+
+    <script>
+        const screenWidth = window.screen.width;
+        const screenHeight = window.screen.height;
+        document.getElementById('resolution').textContent = `${screenWidth} x ${screenHeight} pixels`;
+
+        const availWidth = window.screen.availWidth;
+        const availHeight = window.screen.availHeight;
+        document.getElementById('available-space').textContent = `${availWidth} x ${availHeight} pixels`;
+        
+        const dpr = window.devicePixelRatio || 1;
+        document.getElementById('dpr').textContent = dpr;
+
+        const physicalWidth = screenWidth * dpr;
+        const physicalHeight = screenHeight * dpr;
+        document.getElementById('physical-pixels').textContent = `${physicalWidth} x ${physicalHeight} physical pixels`;
+        
+        document.getElementById('color-depth').textContent = `${window.screen.colorDepth}-bit`;
+        document.getElementById('pixel-depth').textContent = `${window.screen.pixelDepth}-bit`;
+        
+        try {
+            document.getElementById('orientation').textContent = window.screen.orientation.type;
+        } catch (e) {
+            document.getElementById('orientation').textContent = 'API not supported';
+        }
+
+        const viewportWidth = window.innerWidth;
+        const viewportHeight = window.innerHeight;
+        document.getElementById('viewport').textContent = `${viewportWidth} x ${viewportHeight} pixels`;
+    </script>
+</body>
+</html>

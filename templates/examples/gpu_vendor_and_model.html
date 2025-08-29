@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>WebGL GPU Info Extractor</title>
+    <style>
+        body { font-family: sans-serif; background-color: #1e1e1e; color: #d4d4d4; padding: 2em; }
+        #info-box { background-color: #252526; border: 1px solid #333; padding: 1em; border-radius: 5px; }
+        strong { color: #569cd6; }
+    </style>
+</head>
+<body>
+    <h1>WebGL GPU Information</h1>
+    <div id="info-box">Loading...</div>
+
+    <canvas id="webgl-canvas" width="1" height="1" style="display: none;"></canvas>
+
+    <script>
+        const canvas = document.getElementById('webgl-canvas');
+        const infoBox = document.getElementById('info-box');
+
+        const n = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+        
+        const o = {}; 
+        
+        let i;
+
+        if (n) {
+            (i = n.getExtension("WEBGL_debug_renderer_info")) && 
+                (o.UNMASKED_RENDERER_WEBGL = n.getParameter(i.UNMASKED_RENDERER_WEBGL),
+                 o.UNMASKED_VENDOR_WEBGL = n.getParameter(i.UNMASKED_VENDOR_WEBGL));
+
+            if (o.UNMASKED_RENDERER_WEBGL) {
+                infoBox.innerHTML = `
+                    <strong>Vendor:</strong> ${o.UNMASKED_VENDOR_WEBGL}<br>
+                    <strong>Renderer (GPU):</strong> ${o.UNMASKED_RENDERER_WEBGL}
+                `;
+            } else {
+                infoBox.textContent = "The WEBGL_debug_renderer_info extension is not supported or is blocked in this browser.";
+            }
+
+        } else {
+            infoBox.textContent = "WebGL is not supported by your browser.";
+        }
+    </script>
+</body>
+</html>
