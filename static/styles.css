@@ -26,3 +26,14 @@ nav ul li.divider {
     padding-top: 0;
     padding-bottom: 0;
 }
+
+.hero {
+    text-align: center;
+    padding: 4rem 0;
+}
+
+.hero-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 1rem; /* Adds space between the buttons */
+}
