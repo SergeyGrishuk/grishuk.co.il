@@ -4,26 +4,29 @@
     <article>
         <h1>Hardware Information</h1>
 
-        <div id="cpu-info" class="info-box">Detecting CPU...</div>
-        <div id="memory-info" class="info-box">Detecting Memory...</div>
+        <div id="cpu-info" class="info-box">
+            <span class="info-label">Logical CPU Cores:</span>
+            <span class="info-value">Detecting...</span>
+        </div>
+        <div id="memory-info" class="info-box">
+            <span class="info-label">Device Memory (RAM):</span>
+            <span class="info-value">Detecting...</span>
+        </div>
 
         <script>
-            const cpuInfoBox = document.getElementById('cpu-info');
-            const memoryInfoBox = document.getElementById('memory-info');
+            const cpuValueSpan = document.querySelector('#cpu-info .info-value');
+            const memoryValueSpan = document.querySelector('#memory-info .info-value');
 
             if (navigator.hardwareConcurrency) {
-                const coreCount = navigator.hardwareConcurrency;
-                cpuInfoBox.innerHTML = `Your browser reports <strong>${coreCount}</strong> logical CPU cores available.`;
+                cpuValueSpan.textContent = navigator.hardwareConcurrency;
             } else {
-                cpuInfoBox.textContent = "The navigator.hardwareConcurrency API is not supported in this browser.";
+                cpuValueSpan.textContent = 'Not Supported';
             }
 
-            // --- 2. Collect Memory Information ---
             if (navigator.deviceMemory) {
-                const memoryAmount = navigator.deviceMemory;
-                memoryInfoBox.innerHTML = `Your browser reports approximately <strong>${memoryAmount} GB</strong> of RAM.`;
+                memoryValueSpan.textContent = `${navigator.deviceMemory} GB (approx.)`;
             } else {
-                memoryInfoBox.textContent = "The navigator.deviceMemory API is not supported in this browser.";
+                memoryValueSpan.textContent = 'Not Supported';
             }
         </script>
     </article>
