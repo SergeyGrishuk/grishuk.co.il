@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>CPU & Memory Info</title>
+    <style>
+        body { font-family: sans-serif; background-color: #1e1e1e; color: #d4d4d4; padding: 2em; }
+        .info-box { background-color: #252526; border: 1px solid #333; padding: 1em; border-radius: 5px; font-size: 1.2em; margin-bottom: 1em; }
+        strong { color: #569cd6; }
+    </style>
+</head>
+<body>
+    <h1>Hardware Information</h1>
+    
+    <div id="cpu-info" class="info-box">Detecting CPU...</div>
+    <div id="memory-info" class="info-box">Detecting Memory...</div>
+
+    <script>
+        const cpuInfoBox = document.getElementById('cpu-info');
+        const memoryInfoBox = document.getElementById('memory-info');
+
+        if (navigator.hardwareConcurrency) {
+            const coreCount = navigator.hardwareConcurrency;
+            cpuInfoBox.innerHTML = `Your browser reports <strong>${coreCount}</strong> logical CPU cores available.`;
+        } else {
+            cpuInfoBox.textContent = "The navigator.hardwareConcurrency API is not supported in this browser.";
+        }
+
+        // --- 2. Collect Memory Information ---
+        if (navigator.deviceMemory) {
+            const memoryAmount = navigator.deviceMemory;
+            memoryInfoBox.innerHTML = `Your browser reports approximately <strong>${memoryAmount} GB</strong> of RAM.`;
+        } else {
+            memoryInfoBox.textContent = "The navigator.deviceMemory API is not supported in this browser.";
+        }
+    </script>
+</body>
+</html>
