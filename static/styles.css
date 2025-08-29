@@ -35,5 +35,30 @@ nav ul li.divider {
 .hero-buttons {
     display: flex;
     justify-content: center;
-    gap: 1rem; /* Adds space between the buttons */
+    gap: 1rem;
+}
+
+.info-box {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  background-color: var(--pico-card-background-color);
+  border: 1px solid var(--pico-muted-border-color);
+  border-radius: var(--pico-border-radius);
+  box-shadow: var(--pico-card-box-shadow);
+  padding: 1rem 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.info-label {
+  font-weight: bold;
+  color: var(--pico-primary);
+}
+
+.info-value {
+  font-family: var(--pico-font-family-monospace);
+  background-color: var(--pico-muted-background-color);
+  padding: 0.25rem 0.5rem;
+  border-radius: var(--pico-border-radius);
 }
