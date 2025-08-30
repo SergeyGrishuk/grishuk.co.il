@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 
-from fastapi import FastAPI, Request, Depends
+from fastapi import FastAPI, Request, Depends, HTTPException
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
@@ -9,6 +9,7 @@ from sqlalchemy.orm import Session
 from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.exceptions import HTTPException as StarletteHTTPException
 from markdown2 import markdown
+from pathlib import Path
 
 import db_utils.models as models
 from db_utils.database import SessionLocal
@@ -31,6 +32,11 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 
 
 templates = Jinja2Templates(directory="templates")
+
+
+BASE_DIR = Path(__file__).resolve().parent
+TEMPLATE_DIR = BASE_DIR / "templates"
+
 
 def markdown_to_html(text):
     return markdown(text)
@@ -68,4 +74,12 @@ def root(request: Request, db: Session = Depends(get_db)):
 
 @app.get("/examples/{page_name}")
 def show_example(request: Request, page_name: str):
+    template_path = TEMPLATE_DIR / "examples" / page_name
+
+    if not template_path.resolve().is_relative_to(TEMPLATE_DIR.resolve()):
+        raise HTTPException(status_code=403, detail="Permission Denied")
+    
+    if not template_path.is_file():
+        raise HTTPException(status_code=404, detail=f"Page {page_name} not found")
+
     return templates.TemplateResponse(f"examples/{page_name}", {"request": request})
