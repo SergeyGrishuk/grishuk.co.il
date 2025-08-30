@@ -8,7 +8,7 @@ from fastapi.staticfiles import StaticFiles
 from sqlalchemy.orm import Session
 from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.exceptions import HTTPException as StarletteHTTPException
-from markdown2 import markdown
+from markdown_it import MarkdownIt
 from pathlib import Path
 
 import db_utils.models as models
@@ -38,10 +38,8 @@ BASE_DIR = Path(__file__).resolve().parent
 TEMPLATE_DIR = BASE_DIR / "templates"
 
 
-def markdown_to_html(text):
-    return markdown(text)
-
-templates.env.filters["markdown"] = markdown_to_html
+md = MarkdownIt()
+templates.env.filters["markdown"] = md.render
 
 def get_db():
     db = SessionLocal()
@@ -60,7 +58,7 @@ async def not_found_exception_handler(request: Request, exc: StarletteHTTPExcept
     return HTMLResponse(content=str(exc.detail), status_code=exc.status_code)
 
 
-@app.get("/")
+@app.get("/", response_class=HTMLResponse, name="root")
 def root(request: Request, db: Session = Depends(get_db)):
     projects = db.query(models.Project).order_by(models.Project.id.desc()).all()
     posts = db.query(models.Post).order_by(models.Post.id.desc()).all()
@@ -72,7 +70,19 @@ def root(request: Request, db: Session = Depends(get_db)):
     })
 
 
-@app.get("/examples/{page_name}")
+@app.get("/posts/{post_id}", response_class=HTMLResponse, name="show_post")
+def show_post(request: Request, post_id: int, db: Session = Depends(get_db)):
+    post = db.query(models.Post).filter(models.Post.id == post_id).first()
+
+    if not post:
+        raise HTTPException(status_code=404, detail="Post not found")
+    
+    html_content = md.render(post.post_content)
+
+    return templates.TemplateResponse("post.html", {"request": request, "post": post, "html_content": html_content})
+
+
+@app.get("/examples/{page_name}", response_class=HTMLResponse, name="show_example")
 def show_example(request: Request, page_name: str):
     template_path = TEMPLATE_DIR / "examples" / page_name
 
