@@ -2,10 +2,12 @@
 
 
 from fastapi import FastAPI, Request, Depends
+from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
 from sqlalchemy.orm import Session
 from starlette.middleware.base import BaseHTTPMiddleware
+from starlette.exceptions import HTTPException as StarletteHTTPException
 from markdown2 import markdown
 
 import db_utils.models as models
@@ -42,6 +44,14 @@ def get_db():
         yield db
     finally:
         db.close()
+
+
+@app.exception_handler(StarletteHTTPException)
+async def not_found_exception_handler(request: Request, exc: StarletteHTTPException):
+    if exc.status_code == 404:
+        return templates.TemplateResponse("404.html", {"request": request}, status_code=404)
+    
+    return HTMLResponse(content=str(exc.detail), status_code=exc.status_code)
 
 
 @app.get("/")
