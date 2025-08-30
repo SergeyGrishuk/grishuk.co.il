@@ -43,6 +43,7 @@ class Post(Base):
     id = Column(Integer, primary_key=True)
     title = Column(String(256), nullable=False)
     summary = Column(Text, nullable=False)
+    post_content = Column(Text, nullable=False)
     publish_date = Column(DateTime(timezone=True), server_default=func.now())
 
     tags = relationship("Tag", secondary=post_tags, back_populates="posts")
