@@ -1,15 +1,18 @@
 #!/usr/bin/env python3
 
 
+from typing import List, Dict, Any
+from pathlib import Path
 from fastapi import FastAPI, Request, Depends, HTTPException
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
-from sqlalchemy.orm import Session
 from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.exceptions import HTTPException as StarletteHTTPException
+from sqlalchemy.orm import Session
 from markdown_it import MarkdownIt
-from pathlib import Path
+from markdown_it.token import Token
+from markdown_it.renderer import RendererHTML
 
 import db_utils.models as models
 from db_utils.database import SessionLocal
@@ -38,8 +41,23 @@ BASE_DIR = Path(__file__).resolve().parent
 TEMPLATE_DIR = BASE_DIR / "templates"
 
 
+def add_link_attributes(tokens: List[Token], idx: int, options: Dict[str, Any], env: Dict[str, Any], self: RendererHTML) -> str:
+    token = tokens[idx]
+
+    href = token.attrGet("href")
+
+    if href and href.startswith(("http://", "https://")):
+        token.attrSet("target", "_blank")
+        token.attrSet("rel", "noopener noreferrer")
+
+    return self.renderToken(tokens, idx, options)
+
+
 md = MarkdownIt()
+md.add_render_rule("link_open", add_link_attributes)
+
 templates.env.filters["markdown"] = md.render
+
 
 def get_db():
     db = SessionLocal()
