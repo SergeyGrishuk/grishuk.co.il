@@ -40,21 +40,27 @@ templates = Jinja2Templates(directory="templates")
 BASE_DIR = Path(__file__).resolve().parent
 TEMPLATE_DIR = BASE_DIR / "templates"
 
+md = MarkdownIt()
 
-def add_link_attributes(tokens: List[Token], idx: int, options: Dict[str, Any], env: Dict[str, Any], self: RendererHTML) -> str:
-    token = tokens[idx]
+default_link_open = md.renderer.rules.get('link_open')
 
-    href = token.attrGet("href")
 
-    if href and href.startswith(("http://", "https://")):
-        token.attrSet("target", "_blank")
-        token.attrSet("rel", "noopener noreferrer")
+def custom_link_open(tokens, idx, options, env, self):
+    """
+    A custom renderer rule for 'link_open' tokens.
+    This function adds target="_blank" and rel="noopener noreferrer"
+    to all external links.
+    """
 
+    tokens[idx].attrSet('target', '_blank')
+    tokens[idx].attrSet('rel', 'noopener noreferrer')
+
+    if default_link_open:
+        return default_link_open(tokens, idx, options, env, self)
+    
     return self.renderToken(tokens, idx, options)
 
-
-md = MarkdownIt()
-md.add_render_rule("link_open", add_link_attributes)
+md.renderer.rules['link_open'] = custom_link_open
 
 templates.env.filters["markdown"] = md.render
 
