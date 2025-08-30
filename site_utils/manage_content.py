@@ -10,7 +10,7 @@ load_dotenv(".env")
 from argparse import ArgumentParser, Namespace
 
 # Set up project root path
-project_root = Path(__file__).resolve().parent
+project_root = Path(__file__).resolve().parents[1]
 path.append(str(project_root))
 
 from db_utils.database import SessionLocal
