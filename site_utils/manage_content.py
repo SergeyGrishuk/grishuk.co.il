@@ -28,8 +28,8 @@ def parse_arguments() -> Namespace:
 
     # Group for selecting the action
     action_group = parser.add_mutually_exclusive_group(required=True)
-    action_group.add_argument("--add", action="store_true", help="Add a new item.")
-    action_group.add_argument("--delete", action="store_true", help="Delete an existing item.")
+    action_group.add_argument("-a", "--add", action="store_true", help="Add a new item.")
+    action_group.add_argument("-d", "--delete", action="store_true", help="Delete an existing item.")
 
     return parser.parse_args()
 
@@ -48,11 +48,18 @@ def add_item(model_class, item_name: str) -> None:
     # Collect model-specific fields
     if model_class == Project:
         description_file = input("Enter description markdown file name: ")
+
         with open(join("markdown_content", description_file)) as f:
             item_data["description"] = f.read()
+        
         item_data["github_link"] = input("Enter GitHub link: ")
     elif model_class == Post:
         item_data["summary"] = input("Enter post summary: ")
+        
+        post_file = input("Enter post content markdown file name: ")
+
+        with open(join("markdown_content", post_file)) as f:
+            item_data["post_content"] = f.read()
         # publish_date is handled by the database default
 
     db = SessionLocal()
