@@ -45,7 +45,7 @@ md = MarkdownIt()
 default_link_open = md.renderer.rules.get('link_open')
 
 
-def custom_link_open(tokens, idx, options, env, self):
+def custom_link_open(self, tokens, idx, options, env):
     """
     A custom renderer rule for 'link_open' tokens.
     This function adds target="_blank" and rel="noopener noreferrer"
@@ -56,7 +56,7 @@ def custom_link_open(tokens, idx, options, env, self):
     tokens[idx].attrSet('rel', 'noopener noreferrer')
 
     if default_link_open:
-        return default_link_open(tokens, idx, options, env, self)
+        return default_link_open(self, tokens, idx, options, env)
     
     return self.renderToken(tokens, idx, options)
 
