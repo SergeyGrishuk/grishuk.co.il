@@ -70,8 +70,13 @@ def root(request: Request, db: Session = Depends(get_db)):
     })
 
 
-@app.get("/posts/{post_id}", response_class=HTMLResponse, name="show_post")
-def show_post(request: Request, post_id: int, db: Session = Depends(get_db)):
+@app.get("/posts/{post_html_page}", response_class=HTMLResponse, name="show_post")
+def show_post(request: Request, post_html_page: str, db: Session = Depends(get_db)):
+    try:
+        post_id = int(post_html_page.split(".")[0])
+    except ValueError:
+        raise HTTPException(status_code=404, detail="Post not found")
+
     post = db.query(models.Post).filter(models.Post.id == post_id).first()
 
     if not post:
