@@ -3,9 +3,9 @@
 
 import mistune
 
-from typing import List, Dict, Any
 from pathlib import Path
 from fastapi import FastAPI, Request, Depends, HTTPException
+from mistune.renderers.html import HTMLRenderer
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
@@ -39,7 +39,24 @@ templates = Jinja2Templates(directory="templates")
 BASE_DIR = Path(__file__).resolve().parent
 TEMPLATE_DIR = BASE_DIR / "templates"
 
-markdown_processor = mistune.create_markdown()
+
+class CustomRenderer(HTMLRenderer):
+    """
+    Custom renderer to add target="_blank" and rel="noopener noreferrer" to external links.
+    """
+
+    def link(self, text, url, title=None):
+        html = super().link(text, url, title)
+
+        if url.startswith(('http://', 'https://', '//')):
+            return html.replace('<a href=', '<a target="_blank" rel="noopener noreferrer" href=', 1)
+        
+        return html
+
+
+markdown_processor = mistune.create_markdown(
+    renderer=CustomRenderer()
+)
 
 templates.env.filters["markdown"] = markdown_processor
 
