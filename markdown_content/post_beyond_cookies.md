@@ -215,4 +215,4 @@ As we've seen, a vast amount of user data can be collected silently, bypassing c
 
 If you are unsure exactly what data your website or application is collecting, I can help. I provide **comprehensive privacy and security audits** to identify these hidden tracking techniques, analyze the behavior of third-party scripts, and give you a clear picture of your data risk.
 
-**Contact me for a confidential consultation to understand and control your website's data footprint.**
+**Contact me for a [confidential consultation](/#contact) to understand and control your website's data footprint.**
