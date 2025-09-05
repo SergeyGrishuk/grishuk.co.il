@@ -1,23 +1,21 @@
-# Beyond Cookies
+# Beyond Cookies: Are You Aware of How Much Data Your Website is Really Collecting?
 
-## Are You Aware of How Much Data Your Website is Really Collecting?
-
-# Introduction
+## Introduction
 
 Privacy regulations like GDPR and CCPA have forced companies to be transparent about cookie usage. But what if the most invasive tracking on your website doesn't use cookies at all? Modern browsers expose a massive amount of data that can be used to create a unique ‘fingerprint’ of every user, often without their consent. This practice, known as cookieless tracking, presents a significant and often overlooked **business risk**, from violating user trust to running afoul of privacy laws. This post will show you the techniques being used and, more importantly, what it means for your business.
 
 All code examples are available in this [GitHub repository](https://github.com/user-at-host/Websites-Data-Collection-Examples).
 
-# CIR - Cookie-less Identity Resolution
+## CIR - Cookie-less Identity Resolution
 
 **CIR (Cookie-less Identity Resolution)** is a method of web data collection that doesn't involve cookies or any other form of persistent storage in the browser. Instead, a website collects every possible piece of data about a user's device and configuration to create a unique ‘fingerprint’.
 This fingerprint can be cross-referenced later to identify returning users. While this technique is often used for legitimate purposes like fraud and bot detection, its applications extend beyond security into tracking and analytics. The browsers we use provide a vast amount of information about our hardware and software; the unique combination of these data points creates the fingerprint.
 
-# Hardware Enumeration
+## Hardware Enumeration
 
 JavaScript is a powerful tool that allows developers to collect extensive information about a user's device. The following examples are based on techniques seen on some of the largest web applications in use today.
 
-## GPU Fingerprint
+### GPU Fingerprint
 
 Every visitor to your site has a unique combination of hardware and software. Third-party scripts included in your website (like those for analytics or advertising) can exploit this to create a highly accurate user fingerprint. This means user activity can be tracked across sessions and even across different websites, potentially without their knowledge and outside the scope of your company's privacy policy.
 
@@ -25,7 +23,7 @@ Every device, even the smallest laptop, has a GPU. While the GPU model itself is
 
 Several factors contribute to a unique WebGL fingerprint, including the **GPU model**, **browser version**, **operating system**, and **graphics drivers**.
 
-### GPU Model
+#### GPU Model
 
 The following code uses the WebGL API to retrieve the vendor and model of the user's GPU. To see a live example, visit [this page](/examples/gpu_vendor_and_model.html) which shows you the GPU information of your machine.
 
@@ -48,7 +46,7 @@ console.log(o.UNMASKED_VENDOR_WEBGL);
 console.log(o.UNMASKED_RENDERER_WEBGL);
 ```
 
-### Render Fingerprinting
+#### Render Fingerprinting
 
 Websites use the `<canvas>` element to draw a specific, predetermined image using WebGL. This rendered image is then converted to a hash value, which serves as the fingerprint. The graphics drawn for this purpose are typically a combination of shapes, lines, and text with specific properties.
 
@@ -118,19 +116,19 @@ Each device renders the image slightly differently due to variations in hardware
 
 **The Risk:** If your website facilitates this kind of tracking, you lose control over user data. This can damage your brand's reputation and create legal liability if a third-party script is misusing this data.
 
-## CPU and Memory
+### CPU and Memory
 
 Browsers can also collect data about the system's CPU and memory. Although this information is less precise than GPU fingerprinting, it's a valuable data point when combined with other metrics.
 
 **Business Implication:** Even seemingly minor data points contribute to a user's unique fingerprint. While CPU and memory data alone are not enough to identify a user, they are valuable pieces of the puzzle for third-party scripts aiming to build a comprehensive profile of your visitors.
 
-### CPU
+#### CPU
 
 JavaScript can access the number of logical CPU cores via the `navigator.hardwareConcurrency` property.
 - This returns an integer representing the number of logical processor cores available to the browser.
 - There is no direct web API to get the CPU model, frequency, or architecture.
 
-### Memory
+#### Memory
 
 A browser can approximate the amount of RAM on a device using the `navigator.deviceMemory` property.
 
@@ -142,7 +140,7 @@ A browser can approximate the amount of RAM on a device using the `navigator.dev
 
 **The Risk:** On their own, these data points are a low-level risk. However, when combined with GPU, display, and font data, they contribute to a highly accurate fingerprint that can track users without their explicit consent. This "death by a thousand cuts" approach to data collection can create a significant privacy liability for your business.
 
-## Media Devices
+### Media Devices
 
 **Business Implication:** When a website requests access to a user's camera or microphone, it's a moment of critical trust. If a third-party script on your site triggers this permission prompt unexpectedly, it can alarm users and severely damage their perception of your brand's security and integrity.
 
@@ -173,7 +171,7 @@ While the device label stays the same all the time, the device ID is not. It is 
 **The Risk:** The list of a user's specific media devices (e.g., "Logitech BRIO," "Logitech G PRO X") is itself a powerful fingerprinting vector. The risk is twofold: you are **scaring away customers** with unexpected permission prompts while simultaneously **leaking unique identifying information** to third-party scripts.
 
 
-# Display Enumeration
+## Display Enumeration
 
 **Business Implication:** While screen details are essential for responsive web design and legitimate bot detection, this rich dataset is a goldmine for fingerprinting services. Every detail, from screen resolution to the exact browser window size, helps third parties create a more unique and persistent profile of your users.
 
@@ -196,7 +194,7 @@ An example page is available [here](/examples/display_info.html). The full code 
 **The Risk:** You may be using a service for a legitimate purpose (like fraud detection) while that same service is also using the collected data for cross-site tracking, making your business an unwitting accomplice in a larger surveillance network. This creates a supply chain risk where a vendor's data practices become your liability.
 
 
-# Networking
+## Networking
 
 **Business Implication:** Users who employ VPNs or proxies are your most privacy-conscious audience. They are actively trying to protect their identity. If your website contains technology that bypasses these protections, it can be seen as a hostile action that fundamentally breaks user trust and destroys your credibility.
 
@@ -209,7 +207,7 @@ WebRTC is used for real-time communication between browsers but it also can be u
 **The Risk:** The risk here is severe. A WebRTC leak can expose a user's true IP address, completely nullifying their privacy measures. If your website is the source of such a leak, you could be held responsible for exposing sensitive user information, leading to significant brand damage and potential legal consequences.
 
 
-# Summary: Your Website is a Black Box
+## Summary: Your Website is a Black Box
 
 As we've seen, a vast amount of user data can be collected silently, bypassing cookie consent banners. The modern website is a complex assembly of first-party code and dozens of third-party scripts, and it's nearly impossible to know what data is leaving your user's browser and where it's going.
 
