@@ -52,6 +52,12 @@ class CustomRenderer(HTMLRenderer):
             return html.replace("<a href=", '<a target="_blank" rel="noopener noreferrer" href=', 1)
         
         return html.replace("<a href=", '<a target="_blank" href=', 1)
+    
+
+    def image(self, text, url, title = None):
+        html = super().image(text, url, title = None)
+
+        return html.replace('<img src="', '<img class="center-image" src="', 1)
 
 
 markdown_processor = mistune.create_markdown(
