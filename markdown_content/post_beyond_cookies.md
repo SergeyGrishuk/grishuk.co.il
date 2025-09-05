@@ -52,7 +52,7 @@ Websites use the `<canvas>` element to draw a specific, predetermined image usin
 
 The code below draws a Pac-Man-like shape.
 
-Visit [this](/examples/render_fingerprint.html) page to see a live example. A full HTML example can be found [here](https://github.com/user-at-host/Websites-Data-Collection-Examples/blob/main/render-fingerprint.html).
+[Visit the render fingerprinting example](/examples/render_fingerprint.html) page to see a live example. A full HTML example can be found [here](https://github.com/user-at-host/Websites-Data-Collection-Examples/blob/main/render-fingerprint.html).
 
 ![Packman style render](/static/pacman.png)
 
@@ -144,7 +144,7 @@ A browser can approximate the amount of RAM on a device using the `navigator.dev
 
 **Business Implication:** When a website requests access to a user's camera or microphone, it's a moment of critical trust. If a third-party script on your site triggers this permission prompt unexpectedly, it can alarm users and severely damage their perception of your brand's security and integrity.
 
-Each device has components like microphone, camera and speakers. Those are also used for fingerprinting. Each one of them has its own model and device ID. They can be accessed via the navigator.`mediaDevices.enumerateDevices()` method. It does require the user’s permission, but when granted it allows to get all the data about the devices. Below is an example.
+Components like microphones, cameras, and speakers are also used for fingerprinting. Those are also used for fingerprinting. Each one of them has its own model and device ID. They can be accessed via the navigator.`mediaDevices.enumerateDevices()` method. It does require the user’s permission, but when granted it allows to get all the data about the devices. Below is an example.
 
 Visit [this](/examples/list_media_devices.html) page to see a live example. The full code of the page can be found [here](https://github.com/user-at-host/Websites-Data-Collection-Examples/blob/main/list-media-devices.html).
 
