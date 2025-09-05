@@ -1,4 +1,3 @@
-# Beyond Cookies: Are You Aware of How Much Data Your Website is Really Collecting?
 
 ## Introduction
 
