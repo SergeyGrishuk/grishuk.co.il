@@ -6,4 +6,5 @@ sqlalchemy
 psycopg[binary]
 python-dotenv
 markdown2
-markdown-it-py
+#markdown-it-py
+mistune

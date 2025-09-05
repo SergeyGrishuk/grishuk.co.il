@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 
 
+import mistune
+
 from typing import List, Dict, Any
 from pathlib import Path
 from fastapi import FastAPI, Request, Depends, HTTPException
@@ -10,9 +12,6 @@ from fastapi.staticfiles import StaticFiles
 from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.exceptions import HTTPException as StarletteHTTPException
 from sqlalchemy.orm import Session
-from markdown_it import MarkdownIt
-from markdown_it.token import Token
-from markdown_it.renderer import RendererHTML
 
 import db_utils.models as models
 from db_utils.database import SessionLocal
@@ -40,29 +39,9 @@ templates = Jinja2Templates(directory="templates")
 BASE_DIR = Path(__file__).resolve().parent
 TEMPLATE_DIR = BASE_DIR / "templates"
 
-md = MarkdownIt()
+markdown_processor = mistune.create_markdown()
 
-default_link_open = md.renderer.rules.get('link_open')
-
-
-def custom_link_open(self, tokens, idx, options, env):
-    """
-    A custom renderer rule for 'link_open' tokens.
-    This function adds target="_blank" and rel="noopener noreferrer"
-    to all external links.
-    """
-
-    tokens[idx].attrSet('target', '_blank')
-    tokens[idx].attrSet('rel', 'noopener noreferrer')
-
-    if default_link_open:
-        return default_link_open(self, tokens, idx, options, env)
-    
-    return self.renderToken(tokens, idx, options)
-
-md.renderer.rules['link_open'] = custom_link_open
-
-templates.env.filters["markdown"] = md.render
+templates.env.filters["markdown"] = markdown_processor
 
 
 def get_db():
@@ -106,7 +85,7 @@ def show_post(request: Request, post_html_page: str, db: Session = Depends(get_d
     if not post:
         raise HTTPException(status_code=404, detail="Post not found")
     
-    html_content = md.render(post.post_content)
+    html_content = markdown_processor(post.post_content)
 
     return templates.TemplateResponse("post.html", {"request": request, "post": post, "html_content": html_content})
 
