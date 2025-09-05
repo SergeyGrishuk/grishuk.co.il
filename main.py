@@ -48,10 +48,10 @@ class CustomRenderer(HTMLRenderer):
     def link(self, text, url, title=None):
         html = super().link(text, url, title)
 
-        if url.startswith(('http://', 'https://', '//')):
-            return html.replace('<a href=', '<a target="_blank" rel="noopener noreferrer" href=', 1)
+        if url.startswith(("http://", "https://", "//")):
+            return html.replace("<a href=", '<a target="_blank" rel="noopener noreferrer" href=', 1)
         
-        return html
+        return html.replace("<a href=", '<a target="_blank" href=', 1)
 
 
 markdown_processor = mistune.create_markdown(
