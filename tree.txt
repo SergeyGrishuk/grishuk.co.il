@@ -1,0 +1,57 @@
+# Generated with tree -I venv -I .git -I __pycache__ > tree.txt
+
+.
+├── README.md
+├── alembic
+│   ├── README
+│   ├── env.py
+│   ├── script.py.mako
+│   └── versions
+│       ├── 3c81e6c3abe1_add_tags_and_posts.py
+│       ├── 705105302e06_add_post_content.py
+│       ├── cd39809ede78_create_projects_table.py
+│       ├── dd4568bbf8f6_add_post_content.py
+│       └── edfc4746a39f_temporary_remove_post_content.py
+├── alembic.ini
+├── colors.txt
+├── db_utils
+│   ├── __init__.py
+│   ├── database.py
+│   └── models.py
+├── images
+│   ├── dark_scan.jpg
+│   ├── systemctl-status-myapi.PNG
+│   ├── systemctl-status-ssh.PNG
+│   ├── systemd-analyze-security-my-api.png
+│   ├── systemd-analyze-security-output.PNG
+│   └── systemd-analyze-security-ssh.PNG
+├── main.py
+├── markdown_content
+│   ├── post_beyond_cookies.md
+│   └── project_dark_scan.md
+├── notes
+│   └── postgres-setup.md
+├── posts
+│   └── systemd-service-hardening-introduction.html
+├── requirements.txt
+├── site_utils
+│   └── manage_content.py
+├── static
+│   ├── favicon.ico
+│   ├── pacman.png
+│   └── styles.css
+├── templates
+│   ├── 404.html
+│   ├── base.html
+│   ├── examples
+│   │   ├── cpu_and_memory.html
+│   │   ├── display_info.html
+│   │   ├── gpu_vendor_and_model.html
+│   │   ├── list_media_devices.html
+│   │   ├── render_fingerprint.html
+│   │   └── webrtc_ip_finder.html
+│   ├── home.html
+│   └── post.html
+└── tree.txt
+
+12 directories, 41 files
