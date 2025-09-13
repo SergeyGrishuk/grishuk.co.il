@@ -54,6 +54,13 @@ def add_item(model_class, item_name: str) -> None:
         
         item_data["github_link"] = input("Enter GitHub link: ")
     elif model_class == Post:
+        meta_title = input("Enter meta title: [None] ")
+
+        if len(meta_title.strip()) > 0:
+            item_data["meta_title"] = meta_title
+        else:
+            item_data["meta_title"] = None
+
         item_data["summary"] = input("Enter post summary: ")
         
         post_file = input("Enter post content markdown file name: ")
