@@ -1,5 +1,13 @@
 {% extends "base.html" %}
 
+{% block title %}
+    <title>WebGL Render Fingerprint | Sergey Grishuk</title>
+{% endblock %}
+
+{% block meta_description %}
+    <meta name="description" content="This page demonstrates render fingerprinting. It uses your browser's WebGL capabilities to draw a hidden graphic, which is then converted into a unique hash value. Because every combination of hardware (GPU), drivers, and browser renders the image slightly differently, the resulting hash is a highly effective identifier for tracking users.">
+{% endblock %}
+
 {% block content %}
     <article>
         <h1>WebGL Render Fingerprint</h1>

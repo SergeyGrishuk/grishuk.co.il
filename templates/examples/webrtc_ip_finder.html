@@ -1,5 +1,13 @@
 {% extends "base.html" %}
 
+{% block title %}
+    <title>WebRTC IP Address Finder | Sergey Grishuk</title>
+{% endblock %}
+
+{% block meta_description %}
+    <meta name="description" content="This page demonstrates how WebRTC can be used to discover your true IP address. WebRTC allows browsers to communicate directly, but this process can be exploited to bypass many common VPNs and proxies. By initiating a connection, a website can reveal your actual public IP address, de-anonymizing you and creating a severe privacy risk.">
+{% endblock %}
+
 {% block content %}
     <style>
         /* Basic styling to replace the <br> tag */
