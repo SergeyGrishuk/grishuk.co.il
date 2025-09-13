@@ -42,6 +42,7 @@ class Post(Base):
 
     id = Column(Integer, primary_key=True)
     title = Column(String(256), nullable=False)
+    meta_title = Column(String(80), nullable=True)
     summary = Column(Text, nullable=False)
     post_content = Column(Text, nullable=False)
     publish_date = Column(DateTime(timezone=True), server_default=func.now())
