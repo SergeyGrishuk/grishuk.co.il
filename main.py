@@ -108,9 +108,18 @@ def show_post(request: Request, post_html_page: str, db: Session = Depends(get_d
     if not post:
         raise HTTPException(status_code=404, detail="Post not found")
     
+    meta_title = post.meta_title or post.title
     html_content = markdown_processor(post.post_content)
 
-    return templates.TemplateResponse("post.html", {"request": request, "post": post, "html_content": html_content})
+    return templates.TemplateResponse(
+        "post.html", 
+        {
+            "request": request, 
+            "post": post, 
+            "html_content": html_content,
+            "meta_title": meta_title
+        }
+    )
 
 
 @app.get("/examples/{page_name}", response_class=HTMLResponse, name="show_example")
