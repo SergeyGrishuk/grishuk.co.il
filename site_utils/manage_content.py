@@ -30,6 +30,7 @@ def parse_arguments() -> Namespace:
     action_group = parser.add_mutually_exclusive_group(required=True)
     action_group.add_argument("-a", "--add", action="store_true", help="Add a new item.")
     action_group.add_argument("-d", "--delete", action="store_true", help="Delete an existing item.")
+    action_group.add_argument("-m", "--modify", action="store_true", help="Modify an existing item.")
 
     return parser.parse_args()
 
@@ -131,6 +132,66 @@ def delete_item(model_class, item_name: str) -> None:
         db.close()
 
 
+def modify_item(model_class, item_name: str) -> None:
+    """Interactively modifies an existing item (project or post)."""
+    print(f"\n--- Modify a {item_name.capitalize()} ---")
+    db = SessionLocal()
+
+    try:
+        items = db.query(model_class).order_by(model_class.id).all()
+        if not items:
+            print(f"No {item_name}s found to modify.")
+            return
+
+        # List items by number for easy selection
+        print("Select an item to modify:")
+        for i, item in enumerate(items, 1):
+            print(f"  [{i}] {item.title}")
+
+        # Get user's choice
+        choice_str = input(f"\nEnter the number of the {item_name} to modify (or 0 to cancel): ")
+        choice = int(choice_str)
+
+        if choice == 0 or choice > len(items):
+            print("Modification canceled or invalid choice.")
+            return
+
+        item_to_modify = items[choice - 1]
+
+        print(f"\nEditing '{item_to_modify.title}'. Press Enter to keep the current value.")
+
+        # --- Fields common to both Post and Project ---
+        new_title = input(f"Enter new title [{item_to_modify.title}]: ")
+        if new_title.strip():
+            item_to_modify.title = new_title
+
+        # --- Fields specific to Post ---
+        if model_class == Post:
+            current_meta_title = item_to_modify.meta_title or 'None'
+            new_meta_title = input(f"Enter new meta title [{current_meta_title}]: ")
+            if new_meta_title.strip():
+                item_to_modify.meta_title = new_meta_title
+
+            current_summary = item_to_modify.summary
+            new_summary = input(f"Enter new summary [{current_summary[:60]}...]: ")
+            if new_summary.strip():
+                item_to_modify.summary = new_summary
+
+        # You could add similar logic here for Project fields
+        # ...
+
+        db.commit()
+        print(f"\nSuccessfully updated '{item_to_modify.title}'.")
+
+    except (ValueError, IndexError):
+        print("\nInvalid input. Please enter a number from the list.")
+    except Exception as e:
+        db.rollback()
+        print(f"\nAn error occurred: {e}", file=stderr)
+    finally:
+        db.close()
+
+
 if __name__ == "__main__":
     args = parse_arguments()
 
@@ -145,3 +206,6 @@ if __name__ == "__main__":
         add_item(model, name)
     elif args.delete:
         delete_item(model, name)
+    elif args.modify:
+        modify_item(model, name)
+
