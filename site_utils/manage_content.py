@@ -1,6 +1,10 @@
 #!/usr/bin/env python3
 
+
+import re
+
 from os.path import join
+
 from sys import stderr, path
 from pathlib import Path
 from dotenv import load_dotenv
@@ -15,6 +19,15 @@ path.append(str(project_root))
 
 from db_utils.database import SessionLocal
 from db_utils.models import Project, Post, Tag
+
+
+def slugify(text):
+    """A simple function to create a URL-friendly slug."""
+    text = text.lower()
+    text = re.sub(r'[\s_]+', '-', text) # Replace spaces and underscores with hyphens
+    text = re.sub(r'[^a-z0-9-]', '', text) # Remove non-alphanumeric characters except hyphens
+    
+    return text
 
 
 def parse_arguments() -> Namespace:
@@ -62,6 +75,7 @@ def add_item(model_class, item_name: str) -> None:
         else:
             item_data["meta_title"] = None
 
+        item_data["slug"] = slugify(item_data["meta_title"] or item_data["title"])
         item_data["summary"] = input("Enter post summary: ")
         
         post_file = input("Enter post content markdown file name: ")
