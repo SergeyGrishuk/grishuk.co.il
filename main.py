@@ -96,14 +96,14 @@ def root(request: Request, db: Session = Depends(get_db)):
     })
 
 
-@app.get("/posts/{post_html_page}", response_class=HTMLResponse, name="show_post")
-def show_post(request: Request, post_html_page: str, db: Session = Depends(get_db)):
-    try:
-        post_id = int(post_html_page.split(".")[0])
-    except ValueError:
-        raise HTTPException(status_code=404, detail="Post not found")
+@app.get("/posts/{post_slug_html}", response_class=HTMLResponse, name="show_post")
+def show_post(request: Request, post_slug_html: str, db: Session = Depends(get_db)):
+    if not post_slug_html.endswith(".html"):
+        raise HTTPException(status_code=404, detail="Invalid file")
+    
+    post_slug = post_slug_html[:-5]
 
-    post = db.query(models.Post).filter(models.Post.id == post_id).first()
+    post = db.query(models.Post).filter(models.Post.slug == post_slug).first()
 
     if not post:
         raise HTTPException(status_code=404, detail="Post not found")
