@@ -1,8 +1,16 @@
 {% extends "base.html" %}
 
+{% block title %}
+    <title>WebGL GPU Info | Sergey Grishuk</title>
+{% endblock %}
+
+{% block meta_description %}
+    <meta name="description" content="This page uses the WebGL API in your browser to retrieve the specific vendor and model of your Graphics Processing Unit (GPU). This is one of many data points used to create a unique browser fingerprint for tracking without cookies.">
+{% endblock %}
+
 {% block content %}
     <article>
-        <h1>WebGL GPU Information</h1>
+        <h1>WebGL GPU Info</h1>
 
         <blockquote>
             <p>This page uses the WebGL API in your browser to retrieve the specific vendor and model of your Graphics Processing Unit (GPU). This is one of many data points used to create a unique browser fingerprint for tracking without cookies.</p>

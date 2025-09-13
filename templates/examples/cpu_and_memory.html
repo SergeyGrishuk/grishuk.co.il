@@ -1,8 +1,16 @@
 {% extends "base.html" %}
 
+{% block title %}
+    <title>CPU & Memory Info | Sergey Grishuk</title>
+{% endblock %}
+
+{% block meta_description %}
+    <meta name="description" content="This page shows how a browser can access basic hardware details like the number of logical CPU cores and approximate device RAM. While not unique on their own, these data points become valuable identifiers when combined with other metrics (like GPU data) to build a more accurate device fingerprint.">
+{% endblock %}
+
 {% block content %}
     <article>
-        <h1>Hardware Information</h1>
+        <h1>CPU & Memory Info</h1>
 
         <blockquote>
             <p>This page shows how a browser can access basic hardware details like the number of logical CPU cores and approximate device RAM. While not unique on their own, these data points become valuable identifiers when combined with other metrics (like GPU data) to build a more accurate device fingerprint.</p>
