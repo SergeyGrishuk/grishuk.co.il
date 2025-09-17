@@ -8,3 +8,5 @@ python-dotenv
 markdown2
 #markdown-it-py
 mistune
+requests
+beautifulsoup4
