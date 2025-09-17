@@ -1,38 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-
-<url>
-  <loc>https://grishuk.co.il/</loc>
-  <lastmod>2025-09-05T17:48:08+00:00</lastmod>
-</url>
-<url>
-  <loc>https://grishuk.co.il/posts/1.html</loc>
-  <lastmod>2025-09-05T17:48:08+00:00</lastmod>
-</url>
-<url>
-  <loc>https://grishuk.co.il/examples/gpu_vendor_and_model.html</loc>
-  <lastmod>2025-09-05T17:48:08+00:00</lastmod>
-</url>
-<url>
-  <loc>https://grishuk.co.il/examples/render_fingerprint.html</loc>
-  <lastmod>2025-09-05T17:48:08+00:00</lastmod>
-</url>
-<url>
-  <loc>https://grishuk.co.il/examples/cpu_and_memory.html</loc>
-  <lastmod>2025-09-05T17:48:08+00:00</lastmod>
-</url>
-<url>
-  <loc>https://grishuk.co.il/examples/list_media_devices.html</loc>
-  <lastmod>2025-09-05T17:48:08+00:00</lastmod>
-</url>
-<url>
-  <loc>https://grishuk.co.il/examples/display_info.html</loc>
-  <lastmod>2025-09-05T17:48:08+00:00</lastmod>
-</url>
-<url>
-  <loc>https://grishuk.co.il/examples/webrtc_ip_finder.html</loc>
-  <lastmod>2025-09-05T17:48:08+00:00</lastmod>
-</url>
-
-
+  <url>
+    <loc>https://grishuk.co.il/</loc>
+  </url>
+  <url>
+    <loc>https://grishuk.co.il/examples/cpu_and_memory.html</loc>
+  </url>
+  <url>
+    <loc>https://grishuk.co.il/examples/display_info.html</loc>
+  </url>
+  <url>
+    <loc>https://grishuk.co.il/examples/gpu_vendor_and_model.html</loc>
+  </url>
+  <url>
+    <loc>https://grishuk.co.il/examples/list_media_devices.html</loc>
+  </url>
+  <url>
+    <loc>https://grishuk.co.il/examples/render_fingerprint.html</loc>
+  </url>
+  <url>
+    <loc>https://grishuk.co.il/examples/webrtc_ip_finder.html</loc>
+  </url>
+  <url>
+    <loc>https://grishuk.co.il/posts/beyond-cookies-are-you-aware-of-how-much-data-your-website-is-really-collecting</loc>
+  </url>
 </urlset>
