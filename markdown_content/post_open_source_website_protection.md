@@ -1,4 +1,4 @@
-# Open Source Websites Protection
+# A Deep Dive into Website Protection with fail2ban, Nginx, and ModSecurity
 
 
 ## Introduction
@@ -11,9 +11,6 @@ There are many free and open source tools that are used to protect websites from
 In this post I will demonstrate some of them.
 
 All of the examples throughout the post are executed on this website (grishuk.co.il).
-
-<!-- TODO: Update the intro once the post gets more text according to the text -->
-<!-- TODO: Fact check and spell/grammar check -->
 
 
 ## Defense Layers
@@ -39,8 +36,6 @@ The application layer deals with the actual data that the web server receives. T
 
 
 *When applying the defenses it is important to consider the actual usage and use cases of the website in order to improve the security posture of the side while not blocking legitimate users and traffic. Those considerations are making the implementation of the security measures a little bit more "tricky".*
-
-<!-- TODO: Fact check and spell/grammar check -->
 
 
 ## IP Dynamic Blocking
@@ -131,8 +126,6 @@ server {
 ```
 
 The above configuration uses the `mylimit` zone and adds a burst of 10 requests which are processed with no delay. The burst is used allow few extra requests for a client, it is useful for the initial load of a page which usually send more than one request to the server (styles, favicon, scripts, etc.).
-
-<!-- TODO: Fact check and spell/grammar check -->
 
 
 ## Web Application Security
@@ -292,3 +285,4 @@ Once the WAF is activated, i.e. `SecRuleEngine` is set to `On` the request is re
 
 ## Conclusion
 
+Securing a web server doesn't have to be complex or expensive. By implementing a defense-in-depth strategy with powerful open-source tools, you can build a formidable defense against common automated attacks. We've shown how fail2ban protects the network layer from enumeration, Nginx rate limits mitigate denial-of-service attempts, and ModSecurity shields the application layer from malicious payloads. Together, these tools form a robust, cost-effective security posture for any website.
