@@ -260,7 +260,34 @@ Out of the 5000 requests only 148 actually got a response, this means that 97.04
 
 ### Application Protection
 
-The third layer of the defenses on the server is the WAF. 
+The third layer of the defenses on the server is the WAF. It is used to defend against application level attacks. For the demo of the attack I will send a request which contains an attempt for an SQL injection. Although the home page is not vulnerable to an SQL injection (hopefully) it will still trigger the WAF.
+
+The sent request request contains the following injection `?id=1%27%20OR%20%271%27=%271` which is `1' OR '1'='1`
+
+```sh
+curl -v "https://grishuk.co.il/?id=1%27%20OR%20%271%27=%271"
+```
+
+Once the WAF is activated, i.e. `SecRuleEngine` is set to `On` the request is responded with a status of 403 (Forbidden).
+
+```
+< HTTP/2 403
+< server: nginx
+< date: Tue, 23 Sep 2025 15:01:39 GMT
+< content-type: text/html
+< content-length: 146
+< x-frame-options: SAMEORIGIN
+< x-content-type-options: nosniff
+< referrer-policy: strict-origin-when-cross-origin
+
+<html>
+<head><title>403 Forbidden</title></head>
+<body>
+<center><h1>403 Forbidden</h1></center>
+<hr><center>nginx</center>
+</body>
+</html>
+```
 
 
 ## Conclusion
