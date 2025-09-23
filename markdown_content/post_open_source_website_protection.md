@@ -168,6 +168,100 @@ ModSecurity: Warning. Matched "Operator `Ge' with parameter `5' against variable
 
 ## Running Attacks
 
+Now that the security measures are in place, it is time for the "fun part". I am going to launch few simple attacks against my webserver to demonstrate it's abilities to stand against them.
+
+### Enumeration
+
+There are many enumeration tools available, `birb`, `gobuster` and `ffuf` are just a few. Using `ffuf` I will run an enumeration against my server, for the demo of the attack I will use the `common.txt` file from [SecLists](https://github.com/danielmiessler/SecLists/blob/master/Discovery/Web-Content/common.txt) repository.
+
+```sh
+ffuf -w common.txt -u https://grishuk.co.il/FUZZ
+```
+
+```
+
+
+        /'___\  /'___\           /'___\
+       /\ \__/ /\ \__/  __  __  /\ \__/
+       \ \ ,__\\ \ ,__\/\ \/\ \ \ \ ,__\
+        \ \ \_/ \ \ \_/\ \ \_\ \ \ \ \_/
+         \ \_\   \ \_\  \ \____/  \ \_\
+          \/_/    \/_/   \/___/    \/_/
+
+       v2.1.0
+________________________________________________
+
+ :: Method           : GET
+ :: URL              : https://grishuk.co.il/FUZZ
+ :: Wordlist         : FUZZ: /root/ffuf/common.txt
+ :: Follow redirects : false
+ :: Calibration      : false
+ :: Timeout          : 10
+ :: Threads          : 40
+ :: Matcher          : Response status: 200-299,301,302,307,401,403,405,500
+________________________________________________
+
+:: Progress: [485/4750] :: Job [1/1] :: 2 req/sec :: Duration: [0:02:38] :: Errors: 359 ::
+```
+
+As seen in the output of `ffuf`, most of the requested pages generate an error (359). This error is a result of a firewall block created by `fail2ban`. Bellow is an output of the `iptables` rules from the web server.
+
+```
+Chain INPUT (policy ACCEPT 326K packets, 1129M bytes)
+ pkts bytes target     prot opt in     out     source               destination
+59418 4714K f2b-nginx-404  tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            multiport dports 80,443
+50370   65M f2b-sshd   tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            multiport dports 1322
+
+Chain FORWARD (policy ACCEPT 0 packets, 0 bytes)
+ pkts bytes target     prot opt in     out     source               destination
+
+Chain OUTPUT (policy ACCEPT 0 packets, 0 bytes)
+ pkts bytes target     prot opt in     out     source               destination
+
+Chain f2b-nginx-404 (1 references)
+ pkts bytes target     prot opt in     out     source               destination
+ 5768  404K REJECT     all  --  *      *       64.176.173.15        0.0.0.0/0            reject-with icmp-port-unreachable
+22024 2458K RETURN     all  --  *      *       0.0.0.0/0            0.0.0.0/0
+
+Chain f2b-sshd (1 references)
+ pkts bytes target     prot opt in     out     source               destination
+50370   65M RETURN     all  --  *      *       0.0.0.0/0            0.0.0.0/0
+```
+
+As you can see, in the `f2b-nginx-404` chain, the `64.176.173.15` IP address gets rejected. This is the IP address of the server that I am using for the attack.
+
+
+### DoS (Denial of Service)
+
+There are many types of DoS and DDoS attacks, the measures implemented in the examples above provide defenses against some of them. Specifically, the rate limits are created to protect the `FastAPI` application from extensive load which can lead to increased usage of memory, CPU, disk, database and etc.
+
+For the attack I will be using a tool called `hey` which is a replacement for `ab` (according to the [GitHub repository](https://github.com/rakyll/hey)). This tool is used to generate a lot of HTTP request in and send them to a target website.
+
+All for testing purposes of course ;)
+
+I am using the following command to generate 5000 requests against my server.
+
+```sh
+hey -n 5000 -c 100 https://grishuk.co.il/
+```
+
+The `-n` option specifies the number of requests and the `-c` option is used to specify the number of workers.
+
+The results of the execution are as follows:
+
+```
+Status code distribution:
+  [200] 148 responses
+  [429] 4852 responses
+```
+
+Out of the 5000 requests only 148 actually got a response, this means that 97.04% of the requests got blocked. They got a response code of 429 from `nginx` which means that they did not get to the `FastAPI` application behind it.
+
+
+### Application Protection
+
+The third layer of the defenses on the server is the WAF. 
+
 
 ## Conclusion
 
