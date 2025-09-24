@@ -5,9 +5,9 @@
 
 In today's digital economy, robust website security isn't a luxury, it's a necessity. However, for many small and medium sized businesses, the enterprise security market presents a significant barrier. With solutions often carrying five or six figure price tags, comprehensive protection can feel out of reach. But what if you could build a formidable defense without the enterprise budget?
 
-The world of free and open-source software (`FOSS`) offers powerful, battle tested tools that can secure your web applications effectively. This post will serve as a practical guide to implementing a multi layered security strategy using these tools. We will move from the perimeter to the core of your application, covering defenses at the network, behavioral, and application layers to create a resilient and cost-effective security posture.
+The world of free and open-source software (`FOSS`) offers powerful, battle-tested tools that can secure your web applications effectively. This post will serve as a practical guide to implementing a multi-layered security strategy using these tools. We will move from the perimeter to the core of your application, covering defenses at the network, behavioral, and application layers to create a resilient and cost-effective security posture.
 
-There are many free and open source tools that are used to protect websites from various types of attacks.
+There are many free and open-source tools that are used to protect websites from various types of attacks.
 In this post I will demonstrate some of them.
 
 All of the examples throughout the post are executed on this website (grishuk.co.il).
@@ -16,9 +16,9 @@ All of the examples throughout the post are executed on this website (grishuk.co
 ## Defense Layers
 
 The defenses can be divided into several layers, in the post I will address the **network**, **behavior** and **application** layers.
-Each layer of defense has it's own area of responsibility.
+Each layer of defense has its own area of responsibility.
 
-*Although behavior is not an actual technical layer I still treat it as one for this post.*
+*Although behavior is not an actual technical layer I, still treat it as one for this post.*
 
 ### Network Layer
 
@@ -27,7 +27,7 @@ The network layer deals with raw IP addresses and port numbers. Tools such as fi
 
 ### Behavior Layer
 
-This layer is applied to the behavior of the users/clients and their incoming requests. As an example, a user that accidentally requested a non existent page is not a big deal, but a client that enumerates the website and generates hundreds or thousands of 404 requests might cause slower response times or even find an actual vulnerable page or parameter on the website.
+This layer is applied to the behavior of the users/clients and their incoming requests. As an example, a user that accidentally requested a non-existent page is not a big deal, but a client that enumerates the website and generates hundreds or thousands of 404 requests might cause slower response times or even find an actual vulnerable page or parameter on the website.
 
 
 ### Application Layer
@@ -35,14 +35,14 @@ This layer is applied to the behavior of the users/clients and their incoming re
 The application layer deals with the actual data that the web server receives. This is the place for tools such as WAFs (Web Application Firewall) to take action. This layer is used to prevent the actual attacks that involve malicious payloads, injections, executions, inclusions and so on.
 
 
-*When applying the defenses it is important to consider the actual usage and use cases of the website in order to improve the security posture of the side while not blocking legitimate users and traffic. Those considerations are making the implementation of the security measures a little bit more "tricky".*
+*When applying the defenses it is important to consider the actual usage and use cases of the website in order to improve the security posture of the site while not blocking legitimate users and traffic. Those considerations are making the implementation of the security measures a little bit more "tricky".*
 
 
 ## IP Dynamic Blocking
 
-If you ever went over the access logs of your web server, you saw requests to non existing pages (404). Those requests are probably initiated by bots or automated tools which are used to enumerate and discover possible vulnerabilities in websites. To prevent such kinds of enumerations against your website you can simply block the requests on a network layer via the system firewall. This will not only block the HTTP requests but all the incoming traffic from the malicious IP address thus preventing any kind of attack originating from it.
+If you ever went over the access logs of your web server, you saw requests to non-existent pages (404). Those requests are probably initiated by bots or automated tools which are used to enumerate and discover possible vulnerabilities in websites. To prevent such kinds of enumerations against your website you can simply block the requests on a network layer via the system firewall. This will not only block the HTTP requests but all the incoming traffic from the malicious IP address thus preventing any kind of attack originating from it.
 
-A simple and know tool that provides such kind of functionality is `fail2ban`. It is available straight from the standard repositories of most Linux distributions. `fail2ban` allows to create custom rules for any kind of use case. In the example bellow I set it to monitor the access logs of my website and block the IP addresses that generate too many 404 status codes in a time frame of 10 minutes.
+A simple and known tool that provides such kind of functionality is `fail2ban`. It is available straight from the standard repositories of most Linux distributions. `fail2ban` allows to create custom rules for any kind of use case. In the example bellow I set it to monitor the access logs of my website and block the IP addresses that generate too many 404 status codes in a time frame of 10 minutes.
 
 First, I will create a new filter for `fail2ban` which will detect the 404 requests. The filter is located in a separate file named `nginx-404.conf` under the `/etc/fail2ban/filter.d/` directory. The filter looks as follows:
 
@@ -56,7 +56,7 @@ The next step is to tell `fail2ban` to actually monitor the `access.log` file, t
 
 *Make sure you copy the default `jail.conf` to `jail.local` and edit only the `jail.local` file. This prevents the changes from being overwritten by a package update.*
 
-The bellow section is an example for such an entry. It tells `fail2ban` to monitor the `/var/log/nginx/access.log` file and block each IP that has over 6 (in this example) 404 requests.
+The below section is an example for such an entry. It tells `fail2ban` to monitor the `/var/log/nginx/access.log` file and block each IP that has over 6 (in this example) 404 requests.
 
 *A 'jail' is a `fail2ban` term for a set of rules that combines a filter with actions for a specific service.*
 
@@ -110,9 +110,9 @@ YYYY-MM-DD HH:MM:SS fail2ban.filter         [9229]: INFO    [nginx-404] Found 4.
 
 ## Rate Limiting
 
-Nginx is a powerful HTTP server and reverse proxy. In my case I use it as a reverse proxy for my FastAPI application which serves the website. One of the built is capabilities of nginx is rate limits. Rate limits are useful as a protection against enumeration and DDoS attacks. In case a client sends too many requests in a given time period it will get a response from `nginx` that prohibits the access to the actual page. In case of this website, I set it to response with a status of 429 which means "Too Many Requests". 
+Nginx is a powerful HTTP server and reverse proxy. In my case I use it as a reverse proxy for my FastAPI application which serves the website. One of the built in capabilities of nginx is rate limits. Rate limits are useful as a protection against enumeration and DDoS attacks. In case a client sends too many requests in a given time period it will get a response from `nginx` that prohibits the access to the actual page. In case of this website, I set it to response with a status of 429 which means "Too Many Requests". 
 
-To enable rate limits in `nginx` simply add few lines to the configuration files. The first one is the creation of a "zone", which is an abstract name for a set of configurations. Below is an example from the main configuration file of `nginx` (`/etc/nginx/nginx.conf`).
+To enable rate limits in `nginx` simply add a few lines to the configuration files. The first one is the creation of a "zone", which is an abstract name for a set of configurations. Below is an example from the main configuration file of `nginx` (`/etc/nginx/nginx.conf`).
 
 ```conf
 http {
@@ -129,12 +129,12 @@ server {
 }
 ```
 
-The above configuration uses the `mylimit` zone and adds a burst of 10 requests which are processed with no delay. The burst is used allow few extra requests for a client, it is useful for the initial load of a page which usually send more than one request to the server (styles, favicon, scripts, etc.).
+The above configuration uses the `mylimit` zone and adds a burst of 10 requests which are processed with no delay. The burst is used allow few extra requests for a client, it is useful for the initial load of a page which usually sends more than one request to the server (styles, favicon, scripts, etc.).
 
 
 ## Web Application Security
 
-While the previous layers are a great foundation for the defense mechanisms, they still are not complete. The website still might be vulnerable to application level attacks. This is the place where a solution such as a WAF takes place. It is designed to operate on the application level and inspect the requests for possible signs of attacks. Each requests passes through the WAF and checked for malicious payloads or activity, if such a request is detected it gets blocked. In my case (grishuk.co.il) I went with a tool called [ModSecurity](https://github.com/owasp-modsecurity/ModSecurity) which is an open source WAF that integrates with knows HTTP servers (`nginx`, `apache`). The basic (core) rules for `ModSecurity` are available in the official [GitHub repository](https://github.com/coreruleset/coreruleset).
+While the previous layers are a great foundation for the defense mechanisms, they still are not complete. The website still might be vulnerable to application level attacks. This is the place where a solution such as a WAF takes place. It is designed to operate on the application level and inspect the requests for possible signs of attacks. Each requests passes through the WAF and checked for malicious payloads or activity, if such a request is detected it gets blocked. In my case (grishuk.co.il) I went with a tool called [ModSecurity](https://github.com/owasp-modsecurity/ModSecurity) which is an open source WAF that integrates with known HTTP servers (`nginx`, `apache`). The basic (core) rules for `ModSecurity` are available in the official [GitHub repository](https://github.com/coreruleset/coreruleset).
 
 It is important to not enable the blocking of the requests immediately after the installation. Instead, let the WAF operate in a "neutral" mode for a period of time, after which inspect the logs to make sure no valid traffic gets blocked.
 
@@ -155,7 +155,7 @@ server {
 
 Before actually restarting the `nginx` server, make sure that the `SecRuleEngine` setting is set to `DetectionOnly`. Once you are satisfied with the results of the WAF, set it to `On`.
 
-The logs of the matched rules are located in the `/var/log/modsec_audit.log` file. Bello is an example of such a match.
+The logs of the matched rules are located in the `/var/log/modsec_audit.log` file. Below is an example of such a match.
 
 ```log
 ModSecurity: Warning. Matched "Operator `PmFromFile' with parameter `scanners-user-agents.data' against variable `REQUEST_HEADERS:User-Agent' (Value: `Mozilla/5.0 zgrab/0.x' ) [file "/etc/nginx/modsec/coreruleset/rules/REQUEST-913-SCANNER-DETECTION.conf"] [line "38"] [id "913100"] [rev ""] [msg "Found User-Agent associated with security scanner"] [data "Matched Data: zgrab found within REQUEST_HEADERS:User-Agent: Mozilla/5.0 zgrab/0.x"] [severity "2"] [ver "OWASP_CRS/4.19.0-dev"] [maturity "0"] [accuracy "0"] [tag "application-multi"] [tag "language-multi"] [tag "platform-multi"] [tag "attack-reputation-scanner"] [tag "paranoia-level/1"] [tag "OWASP_CRS"] [tag "OWASP_CRS/SCANNER-DETECTION"] [tag "capec/1000/118/224/541/310"] [hostname "grishuk.co.il"] [uri "/"] [unique_id "175859323163.835235"] [ref "o12,5v47,21"]
@@ -165,7 +165,7 @@ ModSecurity: Warning. Matched "Operator `Ge' with parameter `5' against variable
 
 ## Running Attacks
 
-Now that the security measures are in place, it is time for the "fun part". I am going to launch few simple attacks against my webserver to demonstrate it's abilities to stand against them.
+Now that the security measures are in place, it is time for the "fun part". I am going to launch few simple attacks against my webserver to demonstrate its abilities to stand against them.
 
 ### Enumeration
 
@@ -201,7 +201,7 @@ ________________________________________________
 :: Progress: [485/4750] :: Job [1/1] :: 2 req/sec :: Duration: [0:02:38] :: Errors: 359 ::
 ```
 
-As seen in the output of `ffuf`, most of the requested pages generate an error (359). This error is a result of a firewall block created by `fail2ban`. Bellow is an output of the `iptables` rules from the web server.
+As seen in the output of `ffuf`, most of the requested pages generate an error (359). This error is a result of a firewall block created by `fail2ban`. Below is an output of the `iptables` rules from the web server.
 
 ```
 Chain INPUT (policy ACCEPT 326K packets, 1129M bytes)
@@ -259,7 +259,7 @@ Out of the 5000 requests only 148 actually got a response, this means that 97.04
 
 The third layer of the defenses on the server is the WAF. It is used to defend against application level attacks. For the demo of the attack I will send a request which contains an attempt for an SQL injection. Although the home page is not vulnerable to an SQL injection (hopefully) it will still trigger the WAF.
 
-The sent request request contains the following injection `?id=1%27%20OR%20%271%27=%271` which is `1' OR '1'='1`
+The sent request contains the following injection `?id=1%27%20OR%20%271%27=%271` which is `1' OR '1'='1`
 
 ```sh
 curl -v "https://grishuk.co.il/?id=1%27%20OR%20%271%27=%271"
