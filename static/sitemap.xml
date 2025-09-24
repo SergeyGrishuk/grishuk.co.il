@@ -22,6 +22,9 @@
     <loc>https://grishuk.co.il/examples/webrtc_ip_finder.html</loc>
   </url>
   <url>
+    <loc>https://grishuk.co.il/posts/a-deep-dive-into-website-protection-with-fail2ban-nginx-and-modsecurity</loc>
+  </url>
+  <url>
     <loc>https://grishuk.co.il/posts/beyond-cookies-are-you-aware-of-how-much-data-your-website-is-really-collecting</loc>
   </url>
 </urlset>
