@@ -15,7 +15,7 @@ All of the examples throughout the post are executed on this website (grishuk.co
 
 ## Defense Layers
 
-The defenses can be divided into several layers, in the post I will address the **network**, ***behavior*** and **application** layers.
+The defenses can be divided into several layers, in the post I will address the **network**, **behavior** and **application** layers.
 Each layer of defense has it's own area of responsibility.
 
 *Although behavior is not an actual technical layer I still treat it as one for this post.*
@@ -52,7 +52,11 @@ failregex = ^<HOST> -.*"GET.*HTTP/.*" 404
 ```
 
 It is a simple regular expression that catches 404 requests.
-The next step is to tell `fail2ban` to actually monitor the `access.log` file, this is done via adding a new entry to the main jail file of `fail2ban`. The bellow section is an example for such an entry. It tells `fail2ban` to monitor the `/var/log/nginx/access.log` file and block each IP that has over 6 (in this example) 404 requests.
+The next step is to tell `fail2ban` to actually monitor the `access.log` file, this is done via adding a new entry to the jail file of `fail2ban` which is usually located under `/etc/fail2ban/jail.local`.
+
+*Make sure you copy the default `jail.conf` to `jail.local` and edit only the `jail.local` file. This prevents the changes from being overwritten by a package update.*
+
+The bellow section is an example for such an entry. It tells `fail2ban` to monitor the `/var/log/nginx/access.log` file and block each IP that has over 6 (in this example) 404 requests.
 
 *A 'jail' is a `fail2ban` term for a set of rules that combines a filter with actions for a specific service.*
 
@@ -65,7 +69,7 @@ logpath  = /var/log/nginx/access.log
 maxretry = 6
 ```
 
-By default, `fail2ban` monitors the logs for the past 10 minutes and blocks a host (IP address) for 10 minutes. Those settings can also be configured in the jail file of `fail2ban` which usually located under `/etc/fail2ban/jail.local`. Bellow is an example from the file.
+By default, `fail2ban` monitors the logs for the past 10 minutes and blocks a host (IP address) for 10 minutes. Those settings can also be configured in the jail file of `fail2ban` (`/etc/fail2ban/jail.local`). Bellow is an example from the file.
 
 ```conf
 # "bantime" is the amount of time that a host is banned, integer in seconds or
@@ -84,24 +88,24 @@ maxretry = 5
 On this server, `fail2ban` is configured for 3 days (on the day of writing this) and it already banned a number of IP address. The banned addresses can be found in the `/var/log/fail2ban.log` log file.
 
 ```log
-2025-09-21 03:26:45,562 fail2ban.filter         [9229]: INFO    [nginx-404] Found 172.189.56.43 - 2025-09-21 03:26:45
-2025-09-21 08:59:47,727 fail2ban.filter         [9229]: INFO    [nginx-404] Found 198.235.24.166 - 2025-09-21 08:59:47
-2025-09-21 14:23:55,024 fail2ban.filter         [9229]: INFO    [nginx-404] Found 104.210.140.129 - 2025-09-21 14:23:54
-2025-09-21 14:23:55,066 fail2ban.filter         [9229]: INFO    [nginx-404] Found 104.210.140.129 - 2025-09-21 14:23:55
-2025-09-22 04:35:43,075 fail2ban.filter         [9229]: INFO    [nginx-404] Found 17.241.75.211 - 2025-09-22 04:35:42
-2025-09-22 06:08:01,801 fail2ban.filter         [9229]: INFO    [nginx-404] Found 185.203.132.199 - 2025-09-22 06:08:01
-2025-09-22 06:08:14,235 fail2ban.filter         [9229]: INFO    [nginx-404] Found 185.203.132.199 - 2025-09-22 06:08:14
-2025-09-22 09:44:03,468 fail2ban.filter         [9229]: INFO    [nginx-404] Found 104.210.140.134 - 2025-09-22 09:44:03
-2025-09-22 09:44:05,072 fail2ban.filter         [9229]: INFO    [nginx-404] Found 104.210.140.134 - 2025-09-22 09:44:05
-2025-09-22 10:58:58,104 fail2ban.filter         [9229]: INFO    [nginx-404] Found 79.177.133.201 - 2025-09-22 10:58:58
-2025-09-22 10:58:58,105 fail2ban.filter         [9229]: INFO    [nginx-404] Found 79.177.133.201 - 2025-09-22 10:58:58
-2025-09-22 10:58:58,107 fail2ban.filter         [9229]: INFO    [nginx-404] Found 79.177.133.201 - 2025-09-22 10:58:58
-2025-09-22 12:30:07,319 fail2ban.filter         [9229]: INFO    [sshd] Found 79.177.133.201 - 2025-09-22 12:30:06
-2025-09-22 15:53:23,906 fail2ban.filter         [9229]: INFO    [nginx-404] Found 66.249.64.173 - 2025-09-22 15:53:23
-2025-09-22 22:35:33,293 fail2ban.filter         [9229]: INFO    [nginx-404] Found 4.227.36.13 - 2025-09-22 22:35:33
-2025-09-23 06:07:59,045 fail2ban.filter         [9229]: INFO    [nginx-404] Found 104.210.140.139 - 2025-09-23 06:07:58
-2025-09-23 06:08:00,801 fail2ban.filter         [9229]: INFO    [nginx-404] Found 104.210.140.139 - 2025-09-23 06:08:00
-2025-09-23 08:07:43,341 fail2ban.filter         [9229]: INFO    [nginx-404] Found 4.227.36.41 - 2025-09-23 08:07:43
+YYYY-MM-DD HH:MM:SS fail2ban.filter         [9229]: INFO    [nginx-404] Found 172.189.56.43 - 2025-09-21 03:26:45
+YYYY-MM-DD HH:MM:SS fail2ban.filter         [9229]: INFO    [nginx-404] Found 198.235.24.166 - 2025-09-21 08:59:47
+YYYY-MM-DD HH:MM:SS fail2ban.filter         [9229]: INFO    [nginx-404] Found 104.210.140.129 - 2025-09-21 14:23:54
+YYYY-MM-DD HH:MM:SS fail2ban.filter         [9229]: INFO    [nginx-404] Found 104.210.140.129 - 2025-09-21 14:23:55
+YYYY-MM-DD HH:MM:SS fail2ban.filter         [9229]: INFO    [nginx-404] Found 17.241.75.211 - 2025-09-22 04:35:42
+YYYY-MM-DD HH:MM:SS fail2ban.filter         [9229]: INFO    [nginx-404] Found 185.203.132.199 - 2025-09-22 06:08:01
+YYYY-MM-DD HH:MM:SS fail2ban.filter         [9229]: INFO    [nginx-404] Found 185.203.132.199 - 2025-09-22 06:08:14
+YYYY-MM-DD HH:MM:SS fail2ban.filter         [9229]: INFO    [nginx-404] Found 104.210.140.134 - 2025-09-22 09:44:03
+YYYY-MM-DD HH:MM:SS fail2ban.filter         [9229]: INFO    [nginx-404] Found 104.210.140.134 - 2025-09-22 09:44:05
+YYYY-MM-DD HH:MM:SS fail2ban.filter         [9229]: INFO    [nginx-404] Found 79.177.133.201 - 2025-09-22 10:58:58
+YYYY-MM-DD HH:MM:SS fail2ban.filter         [9229]: INFO    [nginx-404] Found 79.177.133.201 - 2025-09-22 10:58:58
+YYYY-MM-DD HH:MM:SS fail2ban.filter         [9229]: INFO    [nginx-404] Found 79.177.133.201 - 2025-09-22 10:58:58
+YYYY-MM-DD HH:MM:SS fail2ban.filter         [9229]: INFO    [sshd] Found 79.177.133.201 - 2025-09-22 12:30:06
+YYYY-MM-DD HH:MM:SS fail2ban.filter         [9229]: INFO    [nginx-404] Found 66.249.64.173 - 2025-09-22 15:53:23
+YYYY-MM-DD HH:MM:SS fail2ban.filter         [9229]: INFO    [nginx-404] Found 4.227.36.13 - 2025-09-22 22:35:33
+YYYY-MM-DD HH:MM:SS fail2ban.filter         [9229]: INFO    [nginx-404] Found 104.210.140.139 - 2025-09-23 06:07:58
+YYYY-MM-DD HH:MM:SS fail2ban.filter         [9229]: INFO    [nginx-404] Found 104.210.140.139 - 2025-09-23 06:08:00
+YYYY-MM-DD HH:MM:SS fail2ban.filter         [9229]: INFO    [nginx-404] Found 4.227.36.41 - 2025-09-23 08:07:43
 ```
 
 ## Rate Limiting
