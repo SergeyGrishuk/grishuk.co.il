@@ -1,4 +1,3 @@
-#!/usr/vin/env python3
 
 
 from db_utils.database import Base
