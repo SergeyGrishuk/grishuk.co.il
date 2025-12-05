@@ -3,4 +3,5 @@ __pycache__/
 notes/
 
 .env
+.python-version
 TODO.md
