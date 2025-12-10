@@ -104,7 +104,7 @@ def show_post(request: Request, post_slug: str, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="Post not found")
     
     meta_title = post.meta_title or post.title
-    html_content = markdown_processor(post.post_content)
+    html_content = markdown_processor(str(post.post_content))
 
     return templates.TemplateResponse(
         "post.html", 
