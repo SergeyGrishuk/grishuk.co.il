@@ -86,12 +86,12 @@ async def not_found_exception_handler(request: Request, exc: StarletteHTTPExcept
 
 @app.get("/", response_class=HTMLResponse, name="root")
 def root(request: Request, db: Session = Depends(get_db)):
-    projects = db.query(models.Project).order_by(models.Project.id.desc()).all()
+    # projects = db.query(models.Project).order_by(models.Project.id.desc()).all()
     posts = db.query(models.Post).order_by(models.Post.id.desc()).all()
 
     return templates.TemplateResponse("home.html", {
         "request": request,
-        "projects": projects,
+        # "projects": projects,
         "posts": posts
     })
 
@@ -104,7 +104,7 @@ def show_post(request: Request, post_slug: str, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="Post not found")
     
     meta_title = post.meta_title or post.title
-    html_content = markdown_processor(post.post_content)
+    html_content = markdown_processor(str(post.post_content))
 
     return templates.TemplateResponse(
         "post.html", 
