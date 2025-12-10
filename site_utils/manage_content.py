@@ -36,7 +36,7 @@ def parse_arguments() -> Namespace:
 
     # Group for selecting the type of content
     type_group = parser.add_mutually_exclusive_group(required=True)
-    type_group.add_argument("--project", action="store_true", help="Work with projects.")
+    # type_group.add_argument("--project", action="store_true", help="Work with projects.")
     type_group.add_argument("--post", action="store_true", help="Work with posts.")
 
     # Group for selecting the action
@@ -60,28 +60,28 @@ def add_item(model_class, item_name: str) -> None:
     }
 
     # Collect model-specific fields
-    if model_class == Project:
-        description_file = input("Enter description markdown file name: ")
+    # if model_class == Project:
+    #     description_file = input("Enter description markdown file name: ")
 
-        with open(join("markdown_content", description_file)) as f:
-            item_data["description"] = f.read()
+    #     with open(join("markdown_content", description_file)) as f:
+    #         item_data["description"] = f.read()
         
-        item_data["github_link"] = input("Enter GitHub link: ")
-    elif model_class == Post:
-        meta_title = input("Enter meta title: [None] ")
+    #     item_data["github_link"] = input("Enter GitHub link: ")
+    # elif model_class == Post:
+    meta_title = input("Enter meta title: [None] ")
 
-        if len(meta_title.strip()) > 0:
-            item_data["meta_title"] = meta_title
-        else:
-            item_data["meta_title"] = None
+    if len(meta_title.strip()) > 0:
+        item_data["meta_title"] = meta_title
+    else:
+        item_data["meta_title"] = None
 
-        item_data["slug"] = slugify(item_data["meta_title"] or item_data["title"])
-        item_data["summary"] = input("Enter post summary: ")
-        
-        post_file = input("Enter post content markdown file name: ")
+    item_data["slug"] = slugify(item_data["meta_title"] or item_data["title"])
+    item_data["summary"] = input("Enter post summary: ")
+    
+    post_file = input("Enter post content markdown file name: ")
 
-        with open(join("markdown_content", post_file)) as f:
-            item_data["post_content"] = f.read()
+    with open(join("markdown_content", post_file)) as f:
+        item_data["post_content"] = f.read()
         # publish_date is handled by the database default
 
     db = SessionLocal()
@@ -210,10 +210,10 @@ if __name__ == "__main__":
     args = parse_arguments()
 
     # Determine which model and name to use
-    if args.project:
-        model, name = Project, "project"
-    elif args.post:
-        model, name = Post, "post"
+    # if args.project:
+    #     model, name = Project, "project"
+    # elif args.post:
+    model, name = Post, "post"
     
     # Determine which action to perform
     if args.add:
