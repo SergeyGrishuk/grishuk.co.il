@@ -86,12 +86,12 @@ async def not_found_exception_handler(request: Request, exc: StarletteHTTPExcept
 
 @app.get("/", response_class=HTMLResponse, name="root")
 def root(request: Request, db: Session = Depends(get_db)):
-    projects = db.query(models.Project).order_by(models.Project.id.desc()).all()
+    # projects = db.query(models.Project).order_by(models.Project.id.desc()).all()
     posts = db.query(models.Post).order_by(models.Post.id.desc()).all()
 
     return templates.TemplateResponse("home.html", {
         "request": request,
-        "projects": projects,
+        # "projects": projects,
         "posts": posts
     })
 
