@@ -24,7 +24,7 @@ This project implements a Server-Side Rendered (SSR) blog and portfolio system u
 
 ## Setup & Running
 
-Requires Python 3.10+ and a PostgreSQL instance.
+Requires Python 3.9+ and a PostgreSQL instance.
 
 1. Install dependencies:
 
@@ -63,5 +63,5 @@ The project includes a utility script to manage database content from local Mark
 python site_utils/manage_content.py --post --add
 
 # Modify an existing project
-python site_utils/manage_content.py --project --modify
+python site_utils/manage_content.py --post --modify
 ```
