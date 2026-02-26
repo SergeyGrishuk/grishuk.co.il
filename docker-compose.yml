@@ -1,0 +1,23 @@
+services:
+  db:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: grishuk
+      POSTGRES_PASSWORD: grishuk
+      POSTGRES_DB: grishuk
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  web:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      DATABASE_URL: postgresql+psycopg://grishuk:grishuk@db:5432/grishuk
+    depends_on:
+      - db
+
+volumes:
+  pgdata:
