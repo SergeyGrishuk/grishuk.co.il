@@ -9,26 +9,30 @@ SSR blog and portfolio site for [grishuk.co.il](https://grishuk.co.il). FastAPI 
 ## Commands
 
 ```sh
-# Install dependencies
-pip install -r requirements.txt
+# Install dependencies (uses uv — https://docs.astral.sh/uv/)
+uv sync
+
+# Add / remove a dependency
+uv add <pkg>
+uv remove <pkg>
 
 # Run dev server
-uvicorn main:app --reload
+uv run uvicorn main:app --reload
 
 # Run production server
-gunicorn -w 4 -k uvicorn.workers.UvicornWorker main:app
+uv run gunicorn -w 4 -k uvicorn.workers.UvicornWorker main:app
 
 # Database migrations
-alembic upgrade head                    # apply all migrations
-alembic revision --autogenerate -m "description"  # create new migration
+uv run alembic upgrade head                    # apply all migrations
+uv run alembic revision --autogenerate -m "description"  # create new migration
 
 # Content management (interactive CLI, requires DB connection)
-python site_utils/manage_content.py --post --add
-python site_utils/manage_content.py --post --modify
-python site_utils/manage_content.py --post --delete
+uv run python site_utils/manage_content.py --post --add
+uv run python site_utils/manage_content.py --post --modify
+uv run python site_utils/manage_content.py --post --delete
 
 # Sitemap generation
-python site_utils/sitemap_generator.py https://grishuk.co.il
+uv run python site_utils/sitemap_generator.py https://grishuk.co.il
 ```
 
 ## Architecture
