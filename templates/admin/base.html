@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>{% block title %}Admin{% endblock %}</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
+    <link rel="icon" href="{{ url_for('static', path='/favicon.ico') }}" type="image/x-icon">
+</head>
+<body>
+    <header class="container">
+        <nav>
+            <ul>
+                <li><strong>Admin Panel</strong></li>
+            </ul>
+            <ul>
+                <li><a href="/admin/">Posts</a></li>
+                <li><a href="/admin/tags">Tags</a></li>
+                <li>{{ username }}</li>
+                <li><a href="/admin/logout" role="button" class="outline secondary">Logout</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="container">
+        {% block content %}{% endblock %}
+    </main>
+</body>
+</html>

@@ -19,6 +19,8 @@ services:
     restart: unless-stopped
     environment:
       DATABASE_URL: ${DATABASE_URL}
+      SESSION_SECRET_KEY: ${SESSION_SECRET_KEY}
+      HTTPS_ONLY: ${HTTPS_ONLY}
     depends_on:
       db:
         condition: service_healthy

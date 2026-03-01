@@ -1,0 +1,50 @@
+{% extends "admin/base.html" %}
+
+{% block title %}Admin - Posts{% endblock %}
+
+{% block content %}
+<hgroup>
+    <h2>Posts</h2>
+    <p>Manage blog posts</p>
+</hgroup>
+
+<p><a href="/admin/posts/new" role="button">New Post</a></p>
+
+<div style="overflow-x: auto;">
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Title</th>
+                <th>Slug</th>
+                <th>Tags</th>
+                <th>Date</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for post in posts %}
+            <tr>
+                <td>{{ post.id }}</td>
+                <td>{{ post.title }}</td>
+                <td><code>{{ post.slug }}</code></td>
+                <td>{{ post.tags | map(attribute='name') | join(', ') }}</td>
+                <td>{{ post.publish_date.strftime('%Y-%m-%d') if post.publish_date else '' }}</td>
+                <td>
+                    <a href="/admin/posts/{{ post.id }}/edit">Edit</a>
+                    <form method="post" action="/admin/posts/{{ post.id }}/delete" style="display:inline;">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                        <button type="submit" class="outline secondary" style="padding: 4px 10px; margin: 0;"
+                                onclick="return confirm('Delete &quot;{{ post.title }}&quot;?')">Delete</button>
+                    </form>
+                </td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="6">No posts yet.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
