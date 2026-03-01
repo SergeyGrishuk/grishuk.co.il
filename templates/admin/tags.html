@@ -1,0 +1,56 @@
+{% extends "admin/base.html" %}
+
+{% block title %}Admin - Tags{% endblock %}
+
+{% block content %}
+<hgroup>
+    <h2>Tags</h2>
+    <p>Manage tags</p>
+</hgroup>
+
+<form method="post" action="/admin/tags/cleanup" style="margin-bottom: 1rem;">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+    <button type="submit" class="outline" onclick="return confirm('Delete all orphaned tags?')">
+        Clean Up Orphaned Tags
+    </button>
+</form>
+
+<div style="overflow-x: auto;">
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Posts</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for tag, post_count in tags %}
+            <tr>
+                <td>{{ tag.id }}</td>
+                <td>
+                    <form method="post" action="/admin/tags/{{ tag.id }}/rename" style="display: flex; gap: 0.5rem; margin: 0;">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                        <input type="text" name="name" value="{{ tag.name }}" style="margin: 0; padding: 4px 8px;">
+                        <button type="submit" class="outline" style="padding: 4px 10px; margin: 0;">Rename</button>
+                    </form>
+                </td>
+                <td>{{ post_count }}</td>
+                <td>
+                    <form method="post" action="/admin/tags/{{ tag.id }}/delete" style="display: inline;">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                        <button type="submit" class="outline secondary" style="padding: 4px 10px; margin: 0;"
+                                onclick="return confirm('Delete tag &quot;{{ tag.name }}&quot;?')">Delete</button>
+                    </form>
+                </td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="4">No tags yet.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

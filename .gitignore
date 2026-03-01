@@ -3,6 +3,9 @@
 __pycache__/
 notes/
 
+# SSL Certs
+nginx/ssl/
+
 .env
 notes.txt
 TODO.md
