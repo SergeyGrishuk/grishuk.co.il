@@ -1,4 +1,5 @@
 import re
+from datetime import datetime
 
 from fastapi import APIRouter, Request, Depends, Form
 from fastapi.responses import RedirectResponse
@@ -102,6 +103,7 @@ async def admin_create_post(
     summary: str = Form(...),
     tags_input: str = Form(""),
     post_content: str = Form(...),
+    publish_date: str = Form(""),
 ):
     if not slug.strip():
         slug = slugify(meta_title or title)
@@ -114,6 +116,9 @@ async def admin_create_post(
         summary=summary,
         post_content=post_content,
     )
+    if publish_date.strip():
+        post.publish_date = datetime.fromisoformat(publish_date)
+
     sync_tags(db, post, tags_input)
 
     db.add(post)
@@ -156,6 +161,7 @@ async def admin_update_post(
     summary: str = Form(...),
     tags_input: str = Form(""),
     post_content: str = Form(...),
+    publish_date: str = Form(""),
 ):
     post = db.query(Post).filter(Post.id == post_id).first()
     if not post:
@@ -169,6 +175,9 @@ async def admin_update_post(
 
     post.summary = summary
     post.post_content = post_content
+    if publish_date.strip():
+        post.publish_date = datetime.fromisoformat(publish_date)
+
     sync_tags(db, post, tags_input)
 
     db.commit()

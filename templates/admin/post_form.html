@@ -28,6 +28,13 @@
     </small>
     {% endif %}
 
+    <label for="publish_date">
+        Publish Date
+        {% if not post %}<small>(leave blank for current date/time)</small>{% endif %}
+    </label>
+    <input type="datetime-local" id="publish_date" name="publish_date"
+           value="{{ post.publish_date.strftime('%Y-%m-%dT%H:%M') if post and post.publish_date else '' }}">
+
     <label for="summary">Summary</label>
     <textarea id="summary" name="summary" rows="3" required>{{ post.summary if post else '' }}</textarea>
 
