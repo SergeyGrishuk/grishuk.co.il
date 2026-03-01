@@ -50,5 +50,13 @@ class Post(Base):
     tags = relationship("Tag", secondary=post_tags, back_populates="posts")
 
 
+class AdminUser(Base):
+    __tablename__ = "admin_users"
+
+    id = Column(Integer, primary_key=True)
+    username = Column(String(64), unique=True, index=True, nullable=False)
+    password_hash = Column(String(256), nullable=False)
+
+
 Tag.projects = relationship("Project", secondary=project_tags, back_populates="tags")
 Tag.posts = relationship("Post", secondary=post_tags, back_populates="tags")
