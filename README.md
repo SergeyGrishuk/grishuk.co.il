@@ -24,12 +24,12 @@ This project implements a Server-Side Rendered (SSR) blog and portfolio system u
 
 ## Setup & Running
 
-Requires Python 3.9+ and a PostgreSQL instance.
+Requires Python 3.9+, PostgreSQL, and [uv](https://docs.astral.sh/uv/).
 
 1. Install dependencies:
 
 ```sh
-pip install -r requirements.txt
+uv sync
 ```
 
 2. Environment: Create a `.env` file:
@@ -41,17 +41,17 @@ DATABASE_URL=postgresql://user:pass@localhost/dbname
 3. Migrations:
 
 ```sh
-alembic upgrade head
+uv run alembic upgrade head
 ```
 
 4. Run:
 
-```
+```sh
 # Development
-uvicorn main:app --reload
+uv run uvicorn main:app --reload
 
 # Production
-gunicorn -w 4 -k uvicorn.workers.UvicornWorker main:app
+uv run gunicorn -w 4 -k uvicorn.workers.UvicornWorker main:app
 ```
 
 ## CLI Usage
@@ -60,8 +60,8 @@ The project includes a utility script to manage database content from local Mark
 
 ```sh
 # Add a new post
-python site_utils/manage_content.py --post --add
+uv run python site_utils/manage_content.py --post --add
 
 # Modify an existing project
-python site_utils/manage_content.py --post --modify
+uv run python site_utils/manage_content.py --post --modify
 ```
