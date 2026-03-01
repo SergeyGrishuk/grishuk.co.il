@@ -11,7 +11,7 @@ load_dotenv(".env")
 project_root = Path(__file__).resolve().parents[1]
 path.append(str(project_root))
 
-from passlib.hash import bcrypt
+import bcrypt
 
 from db_utils.database import SessionLocal
 from db_utils.models import AdminUser
@@ -39,17 +39,17 @@ def main():
     db = SessionLocal()
     try:
         existing = db.query(AdminUser).filter(AdminUser.username == username).first()
-        if existing:
-            print(f"Error: user '{username}' already exists.", file=stderr)
-            return
+        new_hash = bcrypt.hashpw(password.encode(), bcrypt.gensalt()).decode()
 
-        user = AdminUser(
-            username=username,
-            password_hash=bcrypt.hash(password),
-        )
-        db.add(user)
-        db.commit()
-        print(f"Admin user '{username}' created successfully.")
+        if existing:
+            existing.password_hash = new_hash
+            db.commit()
+            print(f"Password updated for admin user '{username}'.")
+        else:
+            user = AdminUser(username=username, password_hash=new_hash)
+            db.add(user)
+            db.commit()
+            print(f"Admin user '{username}' created successfully.")
     except Exception as e:
         db.rollback()
         print(f"Error: {e}", file=stderr)

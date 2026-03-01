@@ -2,7 +2,7 @@ import secrets
 
 from fastapi import APIRouter, Request, Depends, Form
 from fastapi.responses import RedirectResponse
-from passlib.hash import bcrypt
+import bcrypt
 from slowapi import Limiter
 from slowapi.util import get_remote_address
 from sqlalchemy.orm import Session
@@ -82,7 +82,7 @@ def admin_login_post(
         })
 
     user = db.query(AdminUser).filter(AdminUser.username == username).first()
-    if not user or not bcrypt.verify(password, user.password_hash):
+    if not user or not bcrypt.checkpw(password.encode(), user.password_hash.encode()):
         new_csrf = generate_csrf_token(request)
         return templates.TemplateResponse("admin/login.html", {
             "request": request,
