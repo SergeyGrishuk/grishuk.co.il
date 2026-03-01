@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 
 
-import re
-
 from os.path import join
 
 from sys import stderr, path
@@ -19,15 +17,7 @@ path.append(str(project_root))
 
 from db_utils.database import SessionLocal
 from db_utils.models import Project, Post, Tag
-
-
-def slugify(text):
-    """A simple function to create a URL-friendly slug."""
-    text = text.lower()
-    text = re.sub(r'[\s_]+', '-', text) # Replace spaces and underscores with hyphens
-    text = re.sub(r'[^a-z0-9-]', '', text) # Remove non-alphanumeric characters except hyphens
-    
-    return text
+from slug_utils import slugify
 
 
 def parse_arguments() -> Namespace:

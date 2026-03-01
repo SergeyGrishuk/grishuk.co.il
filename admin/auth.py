@@ -15,7 +15,14 @@ class RequireLoginException(Exception):
     pass
 
 
-limiter = Limiter(key_func=get_remote_address)
+def get_client_ip(request: Request) -> str:
+    real_ip = request.headers.get("x-real-ip")
+    if real_ip:
+        return real_ip.strip()
+    return get_remote_address(request)
+
+
+limiter = Limiter(key_func=get_client_ip)
 
 router = APIRouter(prefix="/admin")
 

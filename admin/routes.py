@@ -1,4 +1,3 @@
-import re
 from datetime import datetime
 
 from fastapi import APIRouter, Request, Depends, Form
@@ -9,6 +8,7 @@ from sqlalchemy import func
 from db_utils.database import SessionLocal
 from db_utils.models import Post, Tag, post_tags
 from admin.auth import require_admin, verify_csrf_token, generate_csrf_token
+from slug_utils import slugify
 
 
 router = APIRouter(prefix="/admin")
@@ -20,13 +20,6 @@ def get_db():
         yield db
     finally:
         db.close()
-
-
-def slugify(text: str) -> str:
-    text = text.lower()
-    text = re.sub(r'[\s_]+', '-', text)
-    text = re.sub(r'[^a-z0-9-]', '', text)
-    return text
 
 
 def ensure_unique_slug(db: Session, slug: str, exclude_post_id: int = None) -> str:
@@ -107,6 +100,10 @@ async def admin_create_post(
 ):
     if not slug.strip():
         slug = slugify(meta_title or title)
+        if not slug:
+            slug = slugify(title)
+        if not slug:
+            slug = "post"
     slug = ensure_unique_slug(db, slug)
 
     post = Post(
