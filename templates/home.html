@@ -8,6 +8,8 @@
     <meta name="description" content="Tech Lead and System Architect specializing in Linux/Android Internals, Secure Infrastructure, and Engineering Leadership. ex-Technion Lecturer.">
 {% endblock %}
 
+{% block body_class %}{% endblock %}
+
 {% block hero %}
 <section class="hero">
     <hgroup>
@@ -17,80 +19,120 @@
     <div class="hero-buttons">
         <a href="/#contact" role="button" class="secondary">Get In Touch</a>
     </div>
-</section>
+</header>
 {% endblock %}
 
 {% block content %}
-    <article id="core_competencies"> <h2>Core Competencies</h2>
-        <hr />
+<div class="body-content">
 
-        <hgroup>
-            <h3>Secure Architecture Design</h3>
-            <p>Designing scalable, resilient systems with security baked in from the first line of code. Expertise in threat modeling complex distributed architectures and preventing logic flaws.</p>
-        </hgroup>
+    <!-- Core Competencies -->
+    <section id="core_competencies" class="section">
+        <div class="fade-in">
+            <div class="section-head">
+                <div class="section-head-cmd"><span class="chevron">&#10095;</span> cat core_competencies.md</div>
+                <div class="section-head-row">
+                    <h2>Core Competencies</h2>
+                    <div class="section-head-line"></div>
+                </div>
+            </div>
+        </div>
+        <div class="competency-grid">
+            <div class="competency-card">
+                <div class="competency-icon">&#128737;&#65039;</div>
+                <h3>Secure Architecture</h3>
+                <p>Threat modeling distributed systems. Security baked in from the first commit.</p>
+                <div class="tag-list">
+                    <span class="tag">threat-model</span>
+                    <span class="tag">distributed</span>
+                    <span class="tag">hardening</span>
+                </div>
+            </div>
+            <div class="competency-card">
+                <div class="competency-icon">&#9881;&#65039;</div>
+                <h3>DevSecOps & Infrastructure</h3>
+                <p>CI/CD pipelines, Docker, Linux internals &mdash; manual bottlenecks turned into automated standards.</p>
+                <div class="tag-list">
+                    <span class="tag">ci/cd</span>
+                    <span class="tag">docker</span>
+                    <span class="tag">linux</span>
+                </div>
+            </div>
+            <div class="competency-card">
+                <div class="competency-icon">&#128225;</div>
+                <h3>Technical Leadership</h3>
+                <p>Mentorship, code reviews, and translating business requirements into technical roadmaps.</p>
+                <div class="tag-list">
+                    <span class="tag">mentorship</span>
+                    <span class="tag">architecture</span>
+                    <span class="tag">roadmaps</span>
+                </div>
+            </div>
+            <div class="competency-card">
+                <div class="competency-icon">&#128300;</div>
+                <h3>System Internals & Research</h3>
+                <p>Linux/Android OS internals for performance tuning, debugging, and system hardening.</p>
+                <div class="tag-list">
+                    <span class="tag">linux</span>
+                    <span class="tag">android</span>
+                    <span class="tag">research</span>
+                </div>
+            </div>
+        </div>
+    </section>
 
-        <hgroup>
-            <h3>DevSecOps & Infrastructure</h3>
-            <p>Building CI/CD pipelines that empower developers to ship faster without breaking security. Transforming manual bottlenecks into automated engineering standards using Docker and Linux internals.</p>
-        </hgroup>
-
-        <hgroup>
-            <h3>Technical Leadership</h3>
-            <p>Leading engineering teams through mentorship, code reviews, and setting high technical standards. Turning business requirements into robust technical roadmaps.</p>
-        </hgroup>
-
-        <hgroup>
-            <h3>System Internals & Research</h3>
-            <p>Deep understanding of OS internals (Linux/Android) to optimize performance, debug complex production issues, and harden systems against sophisticated vectors.</p>
-        </hgroup>
-
-    </article>
-
-    <article id="posts">
-        <h2>Posts</h2>
-        <hr />
-        <div class="grid">
+    <!-- Posts -->
+    <section id="posts" class="section section--flush">
+        <div class="fade-in">
+            <div class="section-head">
+                <div class="section-head-cmd"><span class="chevron">&#10095;</span> cat recent_posts.md</div>
+                <div class="section-head-row">
+                    <h2>Posts</h2>
+                    <div class="section-head-line"></div>
+                </div>
+            </div>
+        </div>
+        <div class="fade-in post-list">
+            {% set accent_classes = ['accent-cyan', 'accent-purple', 'accent-orange', 'accent-green', 'accent-red'] %}
             {% for post in posts %}
-            <div>
-                <h3><a class="contrast" href="/posts/{{ post.slug }}">{{ post.title }}</a></h3>
-                <p>{{ post.summary | markdown | safe }}</p>
-                <div>
+            <a class="post-card {{ accent_classes[loop.index0 % accent_classes|length] }}" href="/posts/{{ post.slug }}">
+                <div class="post-card-header">
+                    <h4 class="post-card-title">{{ post.title }}</h4>
+                    <span class="post-card-date">{{ post.publish_date.strftime('%b %Y') }}</span>
+                </div>
+                <div class="post-card-excerpt">{{ post.summary | markdown | safe }}</div>
+                <div class="post-card-tags">
                     {% for tag in post.tags %}
-                        <small><code>{{ tag.name }}</code></small>
+                    <span class="post-card-tag">{{ tag.name }}</span>
                     {% endfor %}
                 </div>
-            </div>
+            </a>
             {% endfor %}
         </div>
-    </article>
+    </section>
 
-    <!-- <article>
-        <section id="case-studies">
-            <h2>Case Studies</h2>
-            <hr />
-            <div class="grid">
-                {% for project in projects %}
-                <div>
-                    <h3><a class="contrast" target="_blank" rel="noopener noreferrer" href="{{ project.github_link }}">{{ project.title }} <i class="fa-brands fa-github"></i></a></h3>
-                    {{ project.description|markdown|safe }}
-                    <div>
-                        {% for tag in project.tags %}
-                            <small><code>{{ tag.name }}</code></small>
-                        {% endfor %}
+    <!-- Contact -->
+    <section id="contact" class="section section--flush">
+        <div class="fade-in">
+            <div class="contact-card">
+                <div class="contact-glow"></div>
+                <div class="contact-inner">
+                    <div class="prompt prompt--dim">
+                        <span class="prompt-chevron">&#10095;</span>
+                        <span class="prompt-tilde">~</span>
+                        cat contact.md
+                    </div>
+                    <h2>Let's connect.</h2>
+                    <p>Currently available for consulting engagements and interesting technical challenges.</p>
+                    <a href="mailto:sergey@grishuk.co.il" class="contact-email">sergey@grishuk.co.il</a>
+                    <div class="social-links">
+                        <a href="https://github.com/SergeyGrishuk/" target="_blank" rel="noopener noreferrer" class="social-link">GitHub</a>
+                        <a href="https://www.linkedin.com/in/sergey-grishuk/" target="_blank" rel="noopener noreferrer" class="social-link">LinkedIn</a>
+                        <a href="https://gsvsec.com" target="_blank" rel="noopener noreferrer" class="social-link">GSV Security</a>
                     </div>
                 </div>
-                {% endfor %}
             </div>
-        </section>
-    </article> -->
+        </div>
+    </section>
 
-    <article>
-        <section id="contact">
-            <h2>Get In Touch</h2>
-            <hr />
-            <p>I'm always open to connecting with other professionals in the field. Feel free to reach out.</p>
-            <h3><a href="mailto:sergey@grishuk.co.il" role="button" class="contrast">sergey@grishuk.co.il</a></h3>
-        </section>
-    </article>
-
+</div>
 {% endblock %}
