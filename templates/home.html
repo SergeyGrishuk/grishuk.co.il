@@ -11,13 +11,33 @@
 {% block body_class %}{% endblock %}
 
 {% block hero %}
-<section class="hero">
-    <hgroup>
-        <h1 style="margin-bottom: 0.3rem;">Sergey Grishuk | Tech Lead & System Architect</h1>
-        <h2>Linux/Android Internals • Secure Infrastructure • ex-Technion Lecturer</h2>
-    </hgroup>
-    <div class="hero-buttons">
-        <a href="/#contact" role="button" class="secondary">Get In Touch</a>
+<header class="hero">
+    <canvas id="matrix-canvas" class="hero-canvas"></canvas>
+    <div class="hero-scanlines"></div>
+    <div class="hero-content">
+        <div class="prompt">
+            <span class="prompt-chevron">&#10095;</span>
+            <span class="prompt-tilde">~</span>
+            whoami
+        </div>
+        <h1 class="hero-title">
+            <span id="hero-name"></span><span id="cursor-name" class="cursor"></span>
+        </h1>
+        <p class="hero-subtitle">
+            <span id="hero-sub"></span><span id="cursor-sub" class="cursor" style="display:none;"></span>
+        </p>
+
+        <div class="hero-cta">
+            <a href="#contact" class="btn-primary">Get In Touch</a>
+            <a href="#posts" class="btn-secondary">Read Posts &rarr;</a>
+        </div>
+
+        <div class="trust-bar">
+            <span class="trust-item"><span class="trust-item-icon">&#127891;</span> ex-Technion Lecturer</span>
+            <span class="trust-item"><span class="trust-item-icon">&#127970;</span> Team Lead @ Matrix IT</span>
+            <span class="trust-item"><span class="trust-item-icon">&#128218;</span> John Bryce College</span>
+            <span class="trust-item"><span class="trust-item-icon">&#9889;</span> 7+ Years Backend</span>
+        </div>
     </div>
 </header>
 {% endblock %}
