@@ -37,7 +37,7 @@ class SchemeFixMiddleware(BaseHTTPMiddleware):
 app = FastAPI()
 
 # Session middleware for admin panel
-session_secret = os.getenv("SESSION_SECRET_KEY", "dev-secret-change-me")
+session_secret = os.getenv("SESSION_SECRET_KEY", "VFQFHQ2Y4MLIvLK8wCMi7Y9mCsmqD8NoAbOv9a0Cn2ygpoXGXV7OVkokBuccGOdx")
 https_only = os.getenv("HTTPS_ONLY", "false").lower() == "true"
 
 app.add_middleware(
