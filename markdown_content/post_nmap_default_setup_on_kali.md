@@ -33,9 +33,11 @@ servers or even the Tor network.
 
 *There are many ways to proxify scans, the mentioned above methods are just few examples.*
 
-`Nmap` on its own does not have the ability to use proxy servers but it can be easily combined with other tools. One of the common 
-solutions that allows to proxify the scan is a tool called [`proxychains`](https://github.com/rofl0r/proxychains-ng). 
-`proxychains` allows to easily create a chain of proxy servers and route and TCP traffic of any tool through that chain of proxy servers (thus the name). One of the most common use cases for such proxying is proxying of traffic via the Tor network.
+`Nmap` has a built in `--proxies` option, but it is a topic for another time, as based on multiple execution attempts I did not manage to 
+make it work which leads to a another conversation.
+One of the common solutions that allows to proxify the scan is a tool called [`proxychains`](https://github.com/rofl0r/proxychains-ng). 
+`proxychains` allows to easily create a chain of proxy servers and route TCP traffic of any tool through that chain of proxy servers 
+(thus the name). One of the most common use cases for such proxying is proxying of traffic via the Tor network.
 
 To send traffic via the chain of proxies, we simply have to call the `proxychains` command before the command that we are using.
 For example, a `curl` request can be proxied like this.
@@ -74,7 +76,7 @@ proxychains curl https://myip.wtf/json
 }
 ```
 
-*`curl` specifically has a build in ability to proxy the request, here it is used as an example.*
+*`curl` specifically has a built in ability to proxy the request, here it is used as an example.*
 
 Same approach can be used with `nmap`. But here lays the hidden twist. `proxychains` can proxy only full TCP connections, it cannot 
 handle `nmap`'s stealth scan. When running a stealth scan via `proxychains` it does nothing. Simply speaking, attempting a stealth scan 
@@ -132,7 +134,7 @@ Nmap done: 1 IP address (1 host up) scanned in 0.08 seconds
 
 ![Nmap stealth scan with proxychains](../images/nmap_proxychains_stealth_scan.png)
 
-As you can see from Wireshark's and `proxychains`output, the second scan completely ignored the proxy server/s and sent the TCP
+As you can see from Wireshark's and `proxychains` output, the second scan completely ignored the proxy server/s and sent the TCP
 probe directly to the target, thus exposing the IP address of the scanner.
 Such a behavior might put at risk the scanner for various reasons.
 
