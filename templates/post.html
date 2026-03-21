@@ -40,7 +40,7 @@
     (function() {
         const body = document.querySelector('.post-body');
         const list = document.getElementById('toc-list');
-        const headings = body.querySelectorAll('h2, h3');
+        const headings = body.querySelectorAll('h1, h2, h3');
 
         if (headings.length < 2) {
             document.getElementById('toc').style.display = 'none';
@@ -53,7 +53,8 @@
             a.href = '#' + h.id;
             a.textContent = h.textContent;
             a.className = 'toc-link';
-            if (h.tagName === 'H3') li.className = 'toc-indent';
+            if (h.tagName === 'H2') li.className = 'toc-indent';
+            if (h.tagName === 'H3') li.className = 'toc-indent-2';
             li.appendChild(a);
             list.appendChild(li);
         });
