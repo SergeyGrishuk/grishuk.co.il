@@ -19,11 +19,11 @@ The screenshots below show the difference between a stealth scan and a connect s
 
 Command: `nmap -p 443 -Pn -n grishuk.co.il -sS`
 
-![Nmap stealth scan of port 443](../images/nmap_stealth_scan_443_tcp.png)
+![Nmap stealth scan of port 443](/images/nmap_stealth_scan_443_tcp.png)
 
 Command: `nmap -p 443 -Pn -n grishuk.co.il -sT`
 
-![Nmap connect scan of port 443](../images/nmap_connect_scan_443_tcp.png)
+![Nmap connect scan of port 443](/images/nmap_connect_scan_443_tcp.png)
 
 
 ## Using Proxy Servers
@@ -105,7 +105,7 @@ PORT    STATE SERVICE
 Nmap done: 1 IP address (1 host up) scanned in 0.51 seconds
 ```
 
-![Nmap connect scan with proxychains](../images/nmap_proxychains_connect_scan_443.png)
+![Nmap connect scan with proxychains](/images/nmap_proxychains_connect_scan_443.png)
 
 
 2. `nmap` stealth scan with `proxychains`.
@@ -131,7 +131,7 @@ PORT    STATE SERVICE
 Nmap done: 1 IP address (1 host up) scanned in 0.08 seconds
 ```
 
-![Nmap stealth scan with proxychains](../images/nmap_proxychains_stealth_scan.png)
+![Nmap stealth scan with proxychains](/images/nmap_proxychains_stealth_scan.png)
 
 As you can see from Wireshark's and `proxychains` output, the second scan completely ignored the proxy server/s and sent SYN
 packets directly to the target, thus exposing the IP address of the scanner.
