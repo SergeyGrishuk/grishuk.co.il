@@ -1,18 +1,18 @@
 
 # The Hidden Danger Behind Kali's `nmap` Installation
 
-Recently while preparing materials for a scanning lesson for my students I encountered an interesting behavior while running good
-old `nmap`. On the surface this discovery seems minor and positive from usage point of view. But it might lead to dangerous consequences 
+Recently, while preparing materials for a scanning lesson for my students, I encountered an interesting behavior while running good
+old `nmap`. On the surface, this discovery seems minor and positive from a usage point of view. But it might lead to dangerous consequences
 and disclose the identity of the scanner if ignored.
 
 
 ## Default `nmap` Scan Behavior
 
-`Nmap` has many scan options, among them there are `-sS` (stealth scan) and `-sT` (connect scan). By default when `nmap` is executed as
-root it uses the stealth scan, when running `nmap` as a regular user, it uses the connect scan.
+`Nmap` has many scan options, including `-sS` (stealth scan) and `-sT` (connect scan). By default, when `nmap` is executed as
+root it uses the stealth scan. When running `nmap` as a regular user, it uses the connect scan.
 
-Without diving too deep, the main difference between a stealth scan and a connect scan is in the number of packets used and needed
-permissions. Stealth scan creates a little less "noise" to identify an open port. This "stealthy" behavior requires raw network access 
+Without diving too deep, the main difference between a stealth scan and a connect scan is in the number of packets used.
+Stealth scan creates a little less "noise" to identify an open port, but this behavior requires raw network access
 which is available only to the `root` user unless special configurations are made.
 
 The screenshots below show the difference between a stealth scan and a connect scan as seen in Wireshark.
@@ -31,10 +31,9 @@ Command: `nmap -p 443 -Pn -n grishuk.co.il -sT`
 In some cases, when running a scan against a target, we have to use proxy servers. Those can be manually set up proxies, open available
 servers or even the Tor network.
 
-*There are many ways to proxify scans, the mentioned above methods are just few examples.*
+*There are many ways to proxify scans, the methods mentioned above are just a few examples.*
 
-`Nmap` has a built in `--proxies` option, but it is a topic for another time, as based on multiple execution attempts I did not manage to 
-make it work which leads to a another conversation.
+`Nmap` has a built-in `--proxies` option, but in my testing it did not work reliably — a topic for another post.
 One of the common solutions that allows to proxify the scan is a tool called [`proxychains`](https://github.com/rofl0r/proxychains-ng). 
 `proxychains` allows to easily create a chain of proxy servers and route TCP traffic of any tool through that chain of proxy servers 
 (thus the name). One of the most common use cases for such proxying is proxying of traffic via the Tor network.
@@ -76,13 +75,13 @@ proxychains curl https://myip.wtf/json
 }
 ```
 
-*`curl` specifically has a built in ability to proxy the request, here it is used as an example.*
+*`curl` specifically has a built-in ability to proxy the request, here it is used as an example.*
 
-Same approach can be used with `nmap`. But here lays the hidden twist. `proxychains` can proxy only full TCP connections, it cannot 
-handle `nmap`'s stealth scan. When running a stealth scan via `proxychains` it does nothing. Simply speaking, attempting a stealth scan 
+The same approach can be used with `nmap`. But here lies the hidden twist. `proxychains` can proxy only full TCP connections, it cannot
+handle `nmap`'s stealth scan. When running a stealth scan via `proxychains`, it silently fails to intercept the traffic. Simply speaking, attempting a stealth scan
 via `proxychains` will result in exposure of the real IP address of the scanner. Take a look at the following examples.
 
-1. `nmap` scan with `proxychains` with full TCP connect scan.
+1. `nmap` connect scan via `proxychains`.
 
 Command:
 
@@ -134,18 +133,18 @@ Nmap done: 1 IP address (1 host up) scanned in 0.08 seconds
 
 ![Nmap stealth scan with proxychains](../images/nmap_proxychains_stealth_scan.png)
 
-As you can see from Wireshark's and `proxychains` output, the second scan completely ignored the proxy server/s and sent the TCP
-probe directly to the target, thus exposing the IP address of the scanner.
-Such a behavior might put at risk the scanner for various reasons.
+As you can see from Wireshark's and `proxychains` output, the second scan completely ignored the proxy server/s and sent SYN
+packets directly to the target, thus exposing the IP address of the scanner.
+Such behavior might put at risk the scanner for various reasons.
 
 Since on Kali, nmap uses stealth scan even when executed as a regular user, such a behavior poses a threat for the less advanced users.
 
 *The paranoids between us might think that it was done intentionally to expose "script kiddies" ;)*
 
 
-## Nmaps installation on Kali and Other Distributions
+## Nmap's Installation on Kali and Other Distributions
 
-Let's dive a little deeper to understand why `nmap` runs a stealth scan when executed as a regular user and how does it differ from other
+Let's dive a little deeper to understand why `nmap` runs a stealth scan when executed as a regular user and how it differs from
 `nmap` installations on other distributions.
 
 Running the `which` command on `nmap` shows that the executable file for `nmap` is located at `/usr/bin/nmap` which is completely normal.
@@ -156,10 +155,18 @@ $ which nmap
 /usr/bin/nmap
 ```
 
-But when running the `file` command, we discover that it is not an ELF file but a shell script that looks as follows:
+But when running the `file` command, we discover that it is not an ELF binary but a shell script:
 
 ```bash
-$ cat /usr/bin/nmap 
+$ file /usr/bin/nmap
+
+/usr/bin/nmap: POSIX shell script, ASCII text executable
+```
+
+Let's look at its contents:
+
+```bash
+$ cat /usr/bin/nmap
 
 #!/usr/bin/env sh
 
@@ -201,6 +208,20 @@ getcap /usr/lib/nmap/nmap
 - **CAP_NET_BIND_SERVICE**: Allows binding to privileged ports (below 1024) without running as root.
 - **CAP_NET_ADMIN**: The broad networking administration capability. Covers interface configuration (IP addresses, routes, MTU), firewall rules (iptables/nftables), network namespace manipulation, setting promiscuous mode, modifying routing tables, and tweaking socket buffer sizes.
 - **CAP_NET_RAW**: Allows opening raw sockets (AF_PACKET, SOCK_RAW) and using ping (ICMP). Needed for packet sniffing, crafting custom packets, or any tool that works below the transport layer (tcpdump, nmap SYN scans, scapy, etc.).
+
+For comparison, on a standard Debian or Ubuntu installation, `/usr/bin/nmap` is the actual ELF binary with no wrapper script and no capabilities set:
+
+```bash
+$ file /usr/bin/nmap
+
+/usr/bin/nmap: ELF 64-bit LSB pie executable, x86-64, ...
+
+$ getcap /usr/bin/nmap
+
+# (no output — no capabilities set)
+```
+
+This means that on non-Kali distributions, a regular user running `nmap` without `sudo` will default to `-sT` (connect scan) as expected, and `proxychains` will work correctly.
 
 
 ## Summary
