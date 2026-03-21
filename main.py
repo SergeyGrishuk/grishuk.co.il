@@ -2,6 +2,7 @@
 
 
 import os
+import re
 
 import mistune
 
@@ -77,6 +78,11 @@ class CustomRenderer(HTMLRenderer):
 
         return html.replace("<a href=", '<a target="_blank" href=', 1)
 
+
+    def heading(self, text, level, **attrs):
+        slug = re.sub(r'[^\w\s-]', '', re.sub(r'<[^>]+>', '', text)).strip().lower()
+        slug = re.sub(r'[-\s]+', '-', slug)
+        return f'<h{level} id="{slug}">{text}</h{level}>\n'
 
     def image(self, text, url, title = None):
         html = super().image(text, url, title = None)
