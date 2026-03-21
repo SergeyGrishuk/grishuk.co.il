@@ -50,6 +50,7 @@ app.add_middleware(
 )
 app.add_middleware(SchemeFixMiddleware)
 app.mount("/static", StaticFiles(directory="static"), name="static")
+app.mount("/images", StaticFiles(directory="images"), name="images")
 
 # Rate limiter
 app.state.limiter = limiter
