@@ -200,3 +200,12 @@ getcap /usr/lib/nmap/nmap
 - **CAP_NET_ADMIN**: The broad networking administration capability. Covers interface configuration (IP addresses, routes, MTU), firewall rules (iptables/nftables), network namespace manipulation, setting promiscuous mode, modifying routing tables, and tweaking socket buffer sizes.
 - **CAP_NET_RAW**: Allows opening raw sockets (AF_PACKET, SOCK_RAW) and using ping (ICMP). Needed for packet sniffing, crafting custom packets, or any tool that works below the transport layer (tcpdump, nmap SYN scans, scapy, etc.).
 
+
+## Summary
+
+Kali Linux's `nmap` installation differs from other distributions in a subtle but important way. Through a wrapper script and Linux capabilities (`CAP_NET_RAW`, `CAP_NET_ADMIN`, `CAP_NET_BIND_SERVICE`), it allows stealth scans even as a non-root user, a convenience that becomes a liability when combined with proxy tools like proxychains.
+
+Since `proxychains` can only intercept full TCP connections and not raw socket operations, a stealth scan silently bypasses the proxy chain entirely, sending packets directly from your real IP address. On standard Linux distributions this isn't an issue because unprivileged users default to `-sT` (connect scan), which works correctly through proxychains. But on Kali, the `--privileged` flag makes `-sS` the default for all users, creating a false sense of anonymity.               
+
+When scanning through proxies on Kali, always explicitly specify `-sT`. Don't assume the proxy is working, verify it in Wireshark.
+A stealth scan that exposes your real IP to the target is the opposite of stealthy.
