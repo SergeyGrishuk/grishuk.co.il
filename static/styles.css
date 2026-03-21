@@ -671,11 +671,84 @@ body.loaded .body-content {
   opacity: 0.3;
 }
 
+/* ─── POST LAYOUT ─── */
+.post-layout {
+  position: relative;
+  max-width: 1280px;
+  margin: 0 auto;
+}
+
 /* ─── POST PAGE ─── */
 .post-article {
   max-width: 860px;
   margin: 0 auto;
   padding: 40px 28px 100px;
+}
+
+/* ─── TABLE OF CONTENTS ─── */
+.toc {
+  position: fixed;
+  top: 100px;
+  right: calc(50% + 430px + 40px);
+  width: 220px;
+  max-height: calc(100vh - 140px);
+  overflow-y: auto;
+  padding: 16px;
+  border-right: 1px solid var(--border);
+}
+
+.toc-header {
+  font-family: var(--mono);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text);
+  opacity: 0.5;
+  margin-bottom: 12px;
+}
+
+.toc-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.toc-list li {
+  margin-bottom: 6px;
+}
+
+.toc-list li.toc-indent {
+  padding-left: 14px;
+}
+
+.toc-list li.toc-indent-2 {
+  padding-left: 28px;
+}
+
+.toc-link {
+  font-family: var(--sans);
+  font-size: 13px;
+  color: var(--text);
+  opacity: 0.6;
+  text-decoration: none;
+  transition: color 0.2s, opacity 0.2s;
+  display: block;
+  line-height: 1.4;
+}
+
+.toc-link:hover {
+  color: var(--accent);
+  opacity: 1;
+}
+
+.toc-link.toc-active {
+  color: var(--accent);
+  opacity: 1;
+}
+
+/* Hide TOC when viewport is too narrow for it to sit beside the article */
+@media (max-width: 1280px) {
+  .toc { display: none; }
 }
 
 .post-back {
