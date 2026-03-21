@@ -8,7 +8,7 @@ import mistune
 from pathlib import Path
 from fastapi import FastAPI, Request, Depends, HTTPException
 from mistune.renderers.html import HTMLRenderer
-from fastapi.responses import HTMLResponse
+from fastapi.responses import HTMLResponse, PlainTextResponse
 from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
 from starlette.middleware.base import BaseHTTPMiddleware
@@ -117,6 +117,11 @@ async def not_found_exception_handler(request: Request, exc: StarletteHTTPExcept
 # Include admin routers
 app.include_router(auth_router)
 app.include_router(admin_router)
+
+
+@app.get("/robots.txt", response_class=PlainTextResponse, name="robots_txt")
+def robots_txt():
+    return "User-agent: *\nDisallow: /admin\n"
 
 
 @app.get("/", response_class=HTMLResponse, name="root")
