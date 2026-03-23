@@ -3,13 +3,16 @@
 
 import os
 import re
+import time
+import html as html_module
+from xml.etree.ElementTree import Element, SubElement, tostring
 
 import mistune
 
 from pathlib import Path
 from fastapi import FastAPI, Request, Depends, HTTPException
 from mistune.renderers.html import HTMLRenderer
-from fastapi.responses import HTMLResponse, PlainTextResponse
+from fastapi.responses import HTMLResponse, PlainTextResponse, Response
 from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
 from starlette.middleware.base import BaseHTTPMiddleware
@@ -38,7 +41,9 @@ class SchemeFixMiddleware(BaseHTTPMiddleware):
 app = FastAPI()
 
 # Session middleware for admin panel
-session_secret = os.getenv("SESSION_SECRET_KEY", "VFQFHQ2Y4MLIvLK8wCMi7Y9mCsmqD8NoAbOv9a0Cn2ygpoXGXV7OVkokBuccGOdx")
+session_secret = os.getenv("SESSION_SECRET_KEY")
+if not session_secret:
+    raise RuntimeError("SESSION_SECRET_KEY environment variable is required but not set")
 https_only = os.getenv("HTTPS_ONLY", "false").lower() == "true"
 
 app.add_middleware(
@@ -128,6 +133,51 @@ app.include_router(admin_router)
 @app.get("/robots.txt", response_class=PlainTextResponse, name="robots_txt")
 def robots_txt():
     return "User-agent: *\nDisallow: /admin\n"
+
+
+# RSS feed cache (regenerate at most every 15 minutes)
+_rss_cache: dict = {"xml": None, "timestamp": 0.0}
+_RSS_CACHE_TTL = 900  # seconds
+
+
+def _build_rss_feed(posts, site_url: str) -> bytes:
+    rss = Element("rss", version="2.0")
+    channel = SubElement(rss, "channel")
+    SubElement(channel, "title").text = "grishuk.co.il"
+    SubElement(channel, "link").text = site_url
+    SubElement(channel, "description").text = (
+        "Technical blog about development, security, and Linux"
+    )
+    SubElement(channel, "language").text = "en"
+
+    for post in posts:
+        item = SubElement(channel, "item")
+        SubElement(item, "title").text = post.title
+        SubElement(item, "link").text = f"{site_url}/posts/{post.slug}"
+        SubElement(item, "guid").text = f"{site_url}/posts/{post.slug}"
+        SubElement(item, "description").text = post.summary
+        if post.publish_date:
+            SubElement(item, "pubDate").text = post.publish_date.strftime(
+                "%a, %d %b %Y %H:%M:%S +0000"
+            )
+
+    return b'<?xml version="1.0" encoding="UTF-8"?>\n' + tostring(rss, encoding="unicode").encode("utf-8")
+
+
+@app.get("/feed.xml", name="rss_feed")
+def rss_feed(request: Request, db: Session = Depends(get_db)):
+    now = time.monotonic()
+    if _rss_cache["xml"] is not None and (now - _rss_cache["timestamp"]) < _RSS_CACHE_TTL:
+        return Response(content=_rss_cache["xml"], media_type="application/rss+xml")
+
+    posts = db.query(models.Post).order_by(models.Post.id.desc()).all()
+    site_url = str(request.base_url).rstrip("/")
+    xml_bytes = _build_rss_feed(posts, site_url)
+
+    _rss_cache["xml"] = xml_bytes
+    _rss_cache["timestamp"] = now
+
+    return Response(content=xml_bytes, media_type="application/rss+xml")
 
 
 @app.get("/", response_class=HTMLResponse, name="root")
